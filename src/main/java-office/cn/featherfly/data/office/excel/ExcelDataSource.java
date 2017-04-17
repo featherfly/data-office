@@ -1,0 +1,113 @@
+
+package cn.featherfly.data.office.excel;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.poi.POIXMLException;
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFFormulaEvaluator;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import cn.featherfly.data.core.DataSource;
+
+/**
+ * <p>
+ * Excel数据源.支持2003,2007
+ * </p>
+ * 
+ * @param <R>
+ *            Record
+ *
+ * @author 钟冀
+ */
+public class ExcelDataSource<R> implements DataSource<ExcelDataSet<R>, R> {
+
+    private List<ExcelDataSet<R>> dataSets;
+
+    /**
+     * @param workbook
+     *            Workbook
+     * @param mapper
+     *            ExcelDataMapper
+     */
+    public ExcelDataSource(Workbook workbook, ExcelDataMapper<R> mapper) {
+        if (workbook == null) {
+            throw new IllegalArgumentException("workbook 不能为空");
+        }
+        init(workbook, mapper);
+    }
+
+    /**
+     * @param file
+     *            文件
+     * @param mapper
+     *            ExcelDataMapper
+     * @throws IOException IOException
+     */
+    public ExcelDataSource(File file, ExcelDataMapper<R> mapper) throws IOException {
+        if (file == null || !file.exists()) {
+            throw new IllegalArgumentException("file 为空或文件不存在");
+        }
+        Workbook workbook;
+        try {
+            workbook = new XSSFWorkbook(new FileInputStream(file));
+            init(workbook, mapper);
+        } catch (POIXMLException e) {
+            workbook = new HSSFWorkbook(new FileInputStream(file));
+            init(workbook, mapper);
+        }
+    }
+
+    private void init(Workbook workbook, ExcelDataMapper<R> mapper) {
+        int sheetNumber = workbook.getNumberOfSheets();
+        dataSets = new ArrayList<ExcelDataSet<R>>(sheetNumber);
+        for (int i = 0; i < sheetNumber; i++) {
+            Sheet sheet = workbook.getSheetAt(i);
+            FormulaEvaluator evaluator = null;
+            if (workbook instanceof XSSFWorkbook) {
+                evaluator = new XSSFFormulaEvaluator((XSSFWorkbook) workbook);
+            } else if (workbook instanceof SXSSFWorkbook) {
+                evaluator = new SXSSFFormulaEvaluator((SXSSFWorkbook) workbook);
+            } else {
+                evaluator = new HSSFFormulaEvaluator((HSSFWorkbook) workbook);
+            }
+            dataSets.add(new ExcelDataSet<R>(sheet, evaluator, mapper));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ExcelDataSet<R> getDataSet(int index) {
+        return dataSets.get(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<ExcelDataSet<R>> getDataSets() {
+        return dataSets;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getDataSetsNumber() {
+        return dataSets.size();
+    }
+
+}
