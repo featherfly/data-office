@@ -12,8 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import cn.featherfly.data.core.DataRecord;
 import cn.featherfly.data.core.DataSet;
-import cn.featherfly.data.core.DataSource;
-import cn.featherfly.data.office.excel.ExcelDataSource;
 
 /**
  * <p>
@@ -24,6 +22,7 @@ import cn.featherfly.data.office.excel.ExcelDataSource;
  */
 public class ExcelDataSourceReadTest {
 
+    @SuppressWarnings("resource")
     private ExcelDataSourceReadTest(File file) throws IOException {
         Workbook w;
         try {

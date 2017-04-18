@@ -20,7 +20,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import cn.featherfly.data.core.DataSource;
+import cn.featherfly.data.office.OfficeDataSource;
 
 /**
  * <p>
@@ -32,7 +32,7 @@ import cn.featherfly.data.core.DataSource;
  *
  * @author 钟冀
  */
-public class ExcelDataSource<R> implements DataSource<ExcelDataSet<R>, R> {
+public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> {
 
     private List<ExcelDataSet<R>> dataSets;
     

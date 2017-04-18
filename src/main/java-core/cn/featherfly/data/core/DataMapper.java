@@ -25,7 +25,6 @@ public interface DataMapper<R, D> {
      * @param datasource 数据来源
      * @param record 数据记录
      * @param rowNum 行数
-     * @return 数据目标
      */
     void fillData(D datasource, R record, int rowNum);
 }

@@ -18,38 +18,42 @@ import cn.featherfly.data.core.DataMapper;
  * ExcelDataMapper
  * </p>
  * 
- * @param <R> 要映射的具体类
+ * @param <R>
+ *            要映射的具体类
  * 
  * @author 钟冀
  */
-public abstract class ExcelDataMapper<R> implements DataMapper<R, Row>{
-    
+public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
+
     @SuppressWarnings("rawtypes")
     private Conversion conversion = new TypeConversion(ConversionPolicysJdk8.getBasicConversionPolicy());
-	
 
     /**
      * <p>
      * 设置值到Cell里
      * </p>
-     * @param value 值
-     * @param cell cell
+     * 
+     * @param value
+     *            值
+     * @param cell
+     *            cell
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, Cell cell) {
         if (value != null) {
-            cell.setCellValue(
-                    conversion.toString(value, new GenericClass(value.getClass()))
-                    );
+            cell.setCellValue(conversion.toString(value, new GenericClass(value.getClass())));
         }
     }
-    
+
     /**
      * <p>
      * 返回cell的值
      * </p>
-     * @param cell cell
-     * @param evaluator FormulaEvaluator
+     * 
+     * @param cell
+     *            cell
+     * @param evaluator
+     *            FormulaEvaluator
      * @return cell的值
      */
     @SuppressWarnings("deprecation")
@@ -57,7 +61,7 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row>{
         if (cell == null) {
             return null;
         }
-        
+
         Object value = null;
         switch (cell.getCellType()) {
             case Cell.CELL_TYPE_STRING:

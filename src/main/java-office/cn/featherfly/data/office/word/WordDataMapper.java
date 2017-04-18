@@ -15,29 +15,30 @@ import cn.featherfly.data.core.DataMapper;
  * ExcelDataMapper
  * </p>
  * 
- * @param <R> 要映射的具体类
+ * @param <R>
+ *            要映射的具体类
  * 
  * @author 钟冀
  */
-public abstract class WordDataMapper<R> implements DataMapper<R, XWPFTableRow>{
-	
+public abstract class WordDataMapper<R> implements DataMapper<R, XWPFTableRow> {
+
     @SuppressWarnings("rawtypes")
     private Conversion conversion = new TypeConversion(ConversionPolicysJdk8.getBasicConversionPolicy());
-    
 
     /**
      * <p>
      * 设置Cell值
      * </p>
-     * @param value value
-     * @param cell cell
+     * 
+     * @param value
+     *            value
+     * @param cell
+     *            cell
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, XWPFTableCell cell) {
         if (value != null) {
-            cell.setText(
-                    conversion.toString(value, new GenericClass(value.getClass()))
-                    );
+            cell.setText(conversion.toString(value, new GenericClass(value.getClass())));
         }
     }
 

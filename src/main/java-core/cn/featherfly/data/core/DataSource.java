@@ -1,8 +1,6 @@
 
 package cn.featherfly.data.core;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Collection;
 
 /**
@@ -54,15 +52,4 @@ public interface DataSource<D extends DataSet<R>, R> {
      * @return 数据集数量
      */
     int getDataSetsNumber();
-
-    /**
-     * <p>
-     * 保存当前状态
-     * </p>
-     * 
-     * @param outputStream
-     *            OutputStream
-     * @throws IOException IOException
-     */
-    void save(OutputStream outputStream) throws IOException;
 }

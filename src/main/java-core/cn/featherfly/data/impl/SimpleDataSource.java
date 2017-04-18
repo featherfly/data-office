@@ -1,7 +1,6 @@
 
 package cn.featherfly.data.impl;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -110,13 +109,4 @@ public class SimpleDataSource<D extends DataSet<R>, R> implements DataSource<D, 
     public D addDataSet() {
         throw new UnsupportedOperationException();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void save(OutputStream outputStream) {
-        throw new UnsupportedOperationException();
-    }
-
 }

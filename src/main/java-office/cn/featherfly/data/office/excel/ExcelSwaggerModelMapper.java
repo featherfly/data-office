@@ -16,20 +16,23 @@ import io.swagger.annotations.ApiModelProperty;
  * ExcelSwaggerModelMapper
  * </p>
  * 
+ * @param <R>
+ *            要映射的具体类
  * @author 钟冀
  */
 public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
-    
+
     private boolean insertTitleRow = true;
 
     /**
      */
     public ExcelSwaggerModelMapper() {
     }
-    
+
     /**
      * 
-     * @param insertTitleRow insertTitleRow
+     * @param insertTitleRow
+     *            insertTitleRow
      */
     public ExcelSwaggerModelMapper(boolean insertTitleRow) {
         this.insertTitleRow = insertTitleRow;
@@ -59,7 +62,7 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
                     titles.add(apiModelProperty.value());
                 }
                 fillData(titles, row);
-                row = row.getSheet().createRow(rowNum + 1); 
+                row = row.getSheet().createRow(rowNum + 1);
             }
 
             List<Object> recored = new ArrayList<>();
@@ -79,9 +82,10 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
             setCellValue(value, cell);
         }
     }
-    
+
     /**
      * 返回insertTitleRow
+     * 
      * @return insertTitleRow
      */
     public boolean isInsertTitleRow() {
@@ -90,7 +94,9 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
 
     /**
      * 设置insertTitleRow
-     * @param insertTitleRow insertTitleRow
+     * 
+     * @param insertTitleRow
+     *            insertTitleRow
      */
     public void setInsertTitleRow(boolean insertTitleRow) {
         this.insertTitleRow = insertTitleRow;

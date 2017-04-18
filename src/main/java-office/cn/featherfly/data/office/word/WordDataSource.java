@@ -13,7 +13,7 @@ import java.util.List;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 
-import cn.featherfly.data.core.DataSource;
+import cn.featherfly.data.office.OfficeDataSource;
 
 /**
  * <p>
@@ -25,7 +25,7 @@ import cn.featherfly.data.core.DataSource;
  *
  * @author 钟冀
  */
-public class WordDataSource<R> implements DataSource<WordDataSet<R>, R> {
+public class WordDataSource<R> implements OfficeDataSource<WordDataSet<R>, R> {
 
     private List<WordDataSet<R>> dataSets;
 
