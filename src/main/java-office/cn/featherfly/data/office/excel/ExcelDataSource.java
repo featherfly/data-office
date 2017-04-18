@@ -130,8 +130,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
     }
 
     /**
-     * {@inheritDoc}
-     * @throws IOException 
+     * {@inheritDoc} 
      */
     @Override
     public void save(OutputStream outputStream) throws IOException {

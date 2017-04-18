@@ -20,7 +20,6 @@ public class SimpleDataRecord implements DataRecord {
     private ListOrderedMap values = new ListOrderedMap();
 
     /**
-     * @param values
      */
     public SimpleDataRecord() {
     }
