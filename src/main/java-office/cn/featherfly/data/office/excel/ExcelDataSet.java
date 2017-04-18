@@ -93,8 +93,16 @@ public class ExcelDataSet<R> implements DataSet<R> {
     @SuppressWarnings("unchecked")
     @Override
     public <D extends DataSet<R>> D addRecord(R record) {
-        Row row = sheet.createRow(sheet.getLastRowNum());
-        mapper.fillData(row, record, sheet.getLastRowNum());
+        Row row = null;
+        if (records.isEmpty()) {
+            row = sheet.getRow(sheet.getLastRowNum());
+            if (row == null) {
+                row = sheet.createRow(sheet.getLastRowNum());
+            }
+        } else {
+            row = sheet.createRow(sheet.getLastRowNum() + 1);
+        }
+        mapper.fillData(row, record, row.getRowNum());
         records.add(record);
         return (D) this;
     }
