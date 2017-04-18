@@ -1,7 +1,9 @@
 
 package cn.featherfly.data.office.excel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,6 +15,7 @@ import org.springframework.util.NumberUtils;
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
 /**
@@ -28,6 +31,8 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
 
     private Map<Integer, String> columnPropertyNameMap;
 
+    private List<String> titles;
+
     private Class<R> type;
 
     /**
@@ -35,7 +40,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
      *            Record Type Class
      */
     public ExcelObjectMapper(Class<R> type) {
-        this(type, new HashMap<>());
+        this(type, new HashMap<>(), new ArrayList<>());
     }
 
     /**
@@ -46,8 +51,22 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
      *            columnPropertyNameMap
      */
     public ExcelObjectMapper(Class<R> type, Map<Integer, String> columnPropertyNameMap) {
+        this(type, columnPropertyNameMap, new ArrayList<>());
+    }
+
+    /**
+     * 
+     * @param type
+     *            Record Type Class
+     * @param columnPropertyNameMap
+     *            columnPropertyNameMap
+     * @param titles
+     *            titles
+     */
+    public ExcelObjectMapper(Class<R> type, Map<Integer, String> columnPropertyNameMap, List<String> titles) {
         this.type = type;
         this.columnPropertyNameMap = columnPropertyNameMap;
+        this.titles = titles;
     }
 
     /**
@@ -70,8 +89,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
                             value = NumberUtils.convertNumberToTargetClass((Number) value,
                                     (Class<Number>) propertyType);
                         } else {
-                            value = conversion.toObject(value.toString(),
-                                    new GenericClass<>(bd.getBeanProperty(columnPropertyName.getValue()).getType()));
+                            value = conversion.toObject(value.toString(), new GenericClass<>(propertyType));
                         }
                     }
                     BeanUtils.setProperty(record, columnPropertyName.getValue(), value);
@@ -88,6 +106,15 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
      */
     @Override
     public void fillData(Row row, R record, int rowNum) {
+        if (LangUtils.isNotEmpty(titles) && rowNum == 0) {
+            for (int i = 0; i < titles.size(); i++) {
+                String title = titles.get(i);
+                Cell cell = row.createCell(i);
+                setCellValue(title, cell);
+            }
+            row = row.getSheet().createRow(rowNum + 1);
+        }
+
         if (record != null) {
             for (Entry<Integer, String> columnPropertyName : columnPropertyNameMap.entrySet()) {
                 Object value = BeanUtils.getProperty(record, columnPropertyName.getValue());
@@ -118,9 +145,29 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
 
     /**
      * 返回type
+     * 
      * @return type
      */
     public Class<R> getType() {
         return type;
+    }
+
+    /**
+     * 返回titles
+     * 
+     * @return titles
+     */
+    public List<String> getTitles() {
+        return titles;
+    }
+
+    /**
+     * 设置titles
+     * 
+     * @param titles
+     *            titles
+     */
+    public void setTitles(List<String> titles) {
+        this.titles = titles;
     }
 }

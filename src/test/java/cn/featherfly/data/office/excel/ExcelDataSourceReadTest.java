@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.structure.HashChainMap;
 import cn.featherfly.data.core.DataRecord;
@@ -89,6 +92,36 @@ public class ExcelDataSourceReadTest {
             dsIndex++;
         }
     }
+    
+    private static void showReadTemplate() throws IOException, InvalidFormatException {
+        System.out.println("**************************************************");
+        System.out.println("showReadTemplate");
+        System.out.println("**************************************************");
+        
+        try (XSSFWorkbook t = new XSSFWorkbook(new File(ExcelDataSourceReadTest.class.getResource("sheet_template.xlsx").getPath()))) {
+            ExcelSheetTemplateMapper<User> mapper = new ExcelSheetTemplateMapper<User>(User.class, t.getSheetAt(1));
+            try (XSSFWorkbook workbook = new XSSFWorkbook(new File(ExcelDataSourceReadTest.class.getResource("sheet_template_data.xlsx").getPath()))) {
+                ExcelDataSource<User> source = new ExcelDataSource<User>(
+                        workbook
+                        , mapper);
+                int dsIndex = 0;
+                for (DataSet<User> dataSet : source.getDataSets()) {
+                    int rIndex = 0;
+                    System.out.println("sheet " + dsIndex);
+                    for (User record : dataSet.getDataRecords()) {
+                        System.out.println(" row " + rIndex);
+                        for (Entry<Integer, String> entry : mapper.getColumnPropertyNameMap().entrySet()) {
+                            System.out.print("\tcell " + entry.getKey() + " : " + BeanUtils.getProperty(record, entry.getValue()));                    
+                        }
+                        System.out.println();
+                        System.out.println("\tname : " + record.getName() +  "\tage : " + record.getAge());                    
+                        rIndex++;
+                    }
+                    dsIndex++;
+                }
+            }
+        }
+    }
 
     /**
      * <p>
@@ -97,7 +130,7 @@ public class ExcelDataSourceReadTest {
      * @param args args
      * @throws IOException IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         // new T(new File(T.class.getResource("1.xlsx").getPath()));
         // new T(new File(T.class.getResource("2.xlsx").getPath()));
         // new T(new File(T.class.getResource("3.xlsx").getPath()));
@@ -106,6 +139,8 @@ public class ExcelDataSourceReadTest {
         showReadDataRecord();
         
         showReadObject();
+        
+        showReadTemplate();
         
         
         // HSSFWorkbook wb = new HSSFWorkbook(null);
