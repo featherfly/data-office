@@ -2,61 +2,43 @@
 package cn.featherfly.data.office.excel;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.poi.POIXMLException;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+import cn.featherfly.common.bean.BeanUtils;
+import cn.featherfly.common.structure.HashChainMap;
 import cn.featherfly.data.core.DataRecord;
 import cn.featherfly.data.core.DataSet;
 
 /**
  * <p>
- * T 类的说明放这里
+ * ExcelDataSourceReadTest
  * </p>
  *
  * @author 钟冀
  */
 public class ExcelDataSourceReadTest {
 
-    @SuppressWarnings("resource")
-    private ExcelDataSourceReadTest(File file) throws IOException {
-        Workbook w;
-        try {
-            w = new XSSFWorkbook(new FileInputStream(file));
-        } catch (POIXMLException e) {
-            w = new HSSFWorkbook(new FileInputStream(file));
-        }
-        System.out.println(file.getName());
-        System.out.println(w.getNumberOfSheets());
-        System.out.println(w.getSheetAt(0).getLastRowNum());
-        System.out.println(w.getSheetAt(0).getRow(0) == null);
-        System.out.println(w.getSheetAt(0).getRow(0).getLastCellNum());
-    }
+//    @SuppressWarnings("resource")
+//    private ExcelDataSourceReadTest(File file) throws IOException {
+//        Workbook w;
+//        try {
+//            w = new XSSFWorkbook(new FileInputStream(file));
+//        } catch (POIXMLException e) {
+//            w = new HSSFWorkbook(new FileInputStream(file));
+//        }
+//        System.out.println(file.getName());
+//        System.out.println(w.getNumberOfSheets());
+//        System.out.println(w.getSheetAt(0).getLastRowNum());
+//        System.out.println(w.getSheetAt(0).getRow(0) == null);
+//        System.out.println(w.getSheetAt(0).getRow(0).getLastCellNum());
+//    }
 
-    private void t() {
-        XSSFWorkbook w = new XSSFWorkbook();
-        Workbook wb = new XSSFWorkbook();
-        wb.getNumberOfSheets();
-        wb.getSheetAt(1);
-    }
-
-    /**
-     * <p>
-     * 方法的说明
-     * </p>
-     * @param args args
-     * @throws IOException IOException
-     */
-    public static void main(String[] args) throws IOException {
-        // new T(new File(T.class.getResource("1.xlsx").getPath()));
-        // new T(new File(T.class.getResource("2.xlsx").getPath()));
-        // new T(new File(T.class.getResource("3.xlsx").getPath()));
-        // new T(new File(T.class.getResource("3.xls").getPath()));
-
+    private static void showReadDataRecord() throws IOException {
+        System.out.println("**************************************************");
+        System.out.println("showReadDataRecord");
+        System.out.println("**************************************************");
         ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(new File(ExcelDataSourceReadTest.class.getResource("1.xlsx").getPath()),
                 new ExcelDataRecordMapper());
         int dsIndex = 0;
@@ -80,7 +62,52 @@ public class ExcelDataSourceReadTest {
             }
             dsIndex++;
         }
+    }
+    
+    private static void showReadObject() throws IOException {
+        System.out.println("**************************************************");
+        System.out.println("showReadObject");
+        System.out.println("**************************************************");
+        Map<Integer, String> columnPropertyNameMap = new HashChainMap<Integer, String>()
+                .putChain(0, "name")
+                .putChain(1, "age");
+        ExcelDataSource<User> source = new ExcelDataSource<User>(
+                new File(ExcelDataSourceReadTest.class.getResource("object.xlsx").getPath())
+                , new ExcelObjectMapper<>(User.class, columnPropertyNameMap));
+        int dsIndex = 0;
+        for (DataSet<User> dataSet : source.getDataSets()) {
+            int rIndex = 0;
+            System.out.println("sheet " + dsIndex);
+            for (User record : dataSet.getDataRecords()) {
+                System.out.println(" row " + rIndex);
+                for (Entry<Integer, String> entry : columnPropertyNameMap.entrySet()) {
+                    System.out.print("\tcell " + entry.getKey() + " : " + BeanUtils.getProperty(record, entry.getValue()));                    
+                }
+                System.out.println();
+                rIndex++;
+            }
+            dsIndex++;
+        }
+    }
 
+    /**
+     * <p>
+     * 方法的说明
+     * </p>
+     * @param args args
+     * @throws IOException IOException
+     */
+    public static void main(String[] args) throws IOException {
+        // new T(new File(T.class.getResource("1.xlsx").getPath()));
+        // new T(new File(T.class.getResource("2.xlsx").getPath()));
+        // new T(new File(T.class.getResource("3.xlsx").getPath()));
+        // new T(new File(T.class.getResource("3.xls").getPath()));
+
+        showReadDataRecord();
+        
+        showReadObject();
+        
+        
         // HSSFWorkbook wb = new HSSFWorkbook(null);
         // HSSFSheet sheet = wb.getSheetAt(0);
         // HSSFRow row = sheet.getRow(0);

@@ -1,14 +1,14 @@
 
 package cn.featherfly.data.office.excel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -23,14 +23,15 @@ import io.swagger.annotations.ApiModelProperty;
 public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
 
     private boolean insertTitleRow = true;
-
+    
+    
     /**
      */
     public ExcelSwaggerModelMapper() {
+        this(true);
     }
 
     /**
-     * 
      * @param insertTitleRow
      *            insertTitleRow
      */
@@ -53,33 +54,28 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
     public void fillData(Row row, R record, int rowNum) {
         if (record != null) {
             BeanDescriptor<?> beanDescriptor = BeanDescriptor.getBeanDescriptor(record.getClass());
+            
+            Collection<BeanProperty<?>> beanProperties = getApiModelBeanProperties(beanDescriptor);
+            int index = 0;
             if (insertTitleRow && rowNum == 0) {
                 // 第一行的时候再把标题添加进去
-                List<Object> titles = new ArrayList<>();
-                for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
+                for (BeanProperty<?> beanProperty : beanProperties) {
                     ApiModelProperty apiModelProperty = (ApiModelProperty) beanProperty
-                            .getAnnotation(ApiModelProperty.class);
-                    titles.add(apiModelProperty.value());
+                            .getAnnotation(ApiModelProperty.class);                
+                    Cell cell = row.createCell(index);
+                    setCellValue(apiModelProperty.value(), cell);
+                    index++;
                 }
-                fillData(titles, row);
                 row = row.getSheet().createRow(rowNum + 1);
+                index = 0;
             }
-
-            List<Object> recored = new ArrayList<>();
-            for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
+            
+            for (BeanProperty<?> beanProperty : beanProperties) {                
+                Cell cell = row.createCell(index);
                 Object object = beanProperty.getValue(record);
-                recored.add(object);
+                setCellValue(object, cell);
+                index++;
             }
-
-            fillData(recored, row);
-        }
-    }
-
-    private void fillData(List<?> rowValues, Row row) {
-        for (int i = 0; i < rowValues.size(); i++) {
-            Object value = rowValues.get(i);
-            Cell cell = row.createCell(i);
-            setCellValue(value, cell);
         }
     }
 
@@ -100,5 +96,9 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
      */
     public void setInsertTitleRow(boolean insertTitleRow) {
         this.insertTitleRow = insertTitleRow;
+    }
+    
+    private Collection<BeanProperty<?>> getApiModelBeanProperties(BeanDescriptor<?> beanDescriptor) {
+        return beanDescriptor.findBeanPropertys(new BeanPropertyAnnotationMatcher(ApiModelProperty.class));
     }
 }

@@ -1,16 +1,10 @@
 
 package cn.featherfly.data.office.excel;
 
-import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFFormulaEvaluator;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import cn.featherfly.data.core.DataRecord;
 import cn.featherfly.data.impl.SimpleDataRecord;
@@ -35,14 +29,7 @@ public class ExcelDataRecordMapper extends ExcelDataMapper<DataRecord> {
     @Override
     public DataRecord mapRecord(Row row, int rowNum) {
         Workbook workbook = row.getSheet().getWorkbook();
-        FormulaEvaluator evaluator = null;
-        if (workbook instanceof XSSFWorkbook) {
-            evaluator = new XSSFFormulaEvaluator((XSSFWorkbook) workbook);
-        } else if (workbook instanceof SXSSFWorkbook) {
-            evaluator = new SXSSFFormulaEvaluator((SXSSFWorkbook) workbook);
-        } else {
-            evaluator = new HSSFFormulaEvaluator((HSSFWorkbook) workbook);
-        }
+        FormulaEvaluator evaluator = getFormulaEvaluator(workbook);
         return craeteRecord(row, evaluator);
     }
 

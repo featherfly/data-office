@@ -1,11 +1,20 @@
 
 package cn.featherfly.data.office.excel;
 
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFFormulaEvaluator;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.reflect.GenericClass;
 import cn.featherfly.conversion.core.Conversion;
@@ -24,9 +33,17 @@ import cn.featherfly.data.core.DataMapper;
  * @author 钟冀
  */
 public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
+    
+    /**
+     * logger
+     */
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * conversion
+     */
     @SuppressWarnings("rawtypes")
-    private Conversion conversion = new TypeConversion(ConversionPolicysJdk8.getBasicConversionPolicy());
+    protected Conversion conversion = new TypeConversion(ConversionPolicysJdk8.getBasicConversionPolicy());
 
     /**
      * <p>
@@ -44,7 +61,7 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
             cell.setCellValue(conversion.toString(value, new GenericClass(value.getClass())));
         }
     }
-
+    
     /**
      * <p>
      * 返回cell的值
@@ -108,5 +125,24 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
                 break;
         }
         return value;
+    }
+    
+    /**
+     * <p>
+     * 获取FormulaEvaluator
+     * </p>
+     * @param workbook workbook
+     * @return FormulaEvaluator
+     */
+    protected FormulaEvaluator getFormulaEvaluator(Workbook workbook) {
+        FormulaEvaluator evaluator = null;
+        if (workbook instanceof XSSFWorkbook) {
+            evaluator = new XSSFFormulaEvaluator((XSSFWorkbook) workbook);
+        } else if (workbook instanceof SXSSFWorkbook) {
+            evaluator = new SXSSFFormulaEvaluator((SXSSFWorkbook) workbook);
+        } else {
+            evaluator = new HSSFFormulaEvaluator((HSSFWorkbook) workbook);
+        }
+        return evaluator;
     }
 }

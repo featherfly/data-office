@@ -29,7 +29,7 @@ public class User {
      * 设置name
      * @param name name
      */
-    @ApiModelProperty("姓名")
+    @ApiModelProperty(value = "姓名", position = 0)
     public void setName(String name) {
         this.name = name;
     }
@@ -38,7 +38,7 @@ public class User {
      * 返回age
      * @return age
      */
-    @ApiModelProperty("年龄")
+    @ApiModelProperty(value = "年龄" , position = 1)
     public Integer getAge() {
         return age;
     }

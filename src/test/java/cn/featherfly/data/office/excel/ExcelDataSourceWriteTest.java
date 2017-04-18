@@ -7,12 +7,13 @@ import java.io.IOException;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import cn.featherfly.common.structure.HashChainMap;
 import cn.featherfly.data.core.DataRecord;
 import cn.featherfly.data.impl.SimpleDataRecord;
 
 /**
  * <p>
- * T 类的说明放这里
+ * ExcelDataSourceWriteTest
  * </p>
  *
  * @author 钟冀
@@ -27,6 +28,50 @@ public class ExcelDataSourceWriteTest {
      * @throws IOException IOException
      */
     public static void main(String[] args) throws IOException {
+        writeDataRecord();
+        writeObject();
+        writeSwaggerModel();
+    }
+    
+    private static void writeObject() throws IOException {
+        System.out.println("**************************************************");
+        System.out.println("writeObject");
+        System.out.println("**************************************************");
+        
+        ExcelDataSource<User> source = new ExcelDataSource<User>(
+                new XSSFWorkbook(),
+                new ExcelObjectMapper<User>(User.class, new HashChainMap<Integer, String>()
+                        .putChain(0, "name")
+                        .putChain(1, "age")));
+        User user = new User();
+        user.setName("羽飞2");
+        user.setAge(22);
+        source.addDataSet().addRecord(user).addRecord(user);
+        source.save(new FileOutputStream(new File("write.object.xlsx")));
+    }
+    
+    private static void writeSwaggerModel() throws IOException {
+        System.out.println("**************************************************");
+        System.out.println("writeSwaggerModel");
+        System.out.println("**************************************************");
+        
+        ExcelDataSource<User> source = new ExcelDataSource<User>(
+                new XSSFWorkbook(),
+                new ExcelSwaggerModelMapper<User>());
+        User user = new User();
+        user.setName("羽飞");
+        user.setAge(20);
+        User user2 = new User();
+        user2.setName("yufei");
+        user2.setAge(18);
+        source.addDataSet().addRecord(user).addRecord(user2);
+        source.save(new FileOutputStream(new File("write.swagger.xlsx")));
+    }
+    
+    private static void writeDataRecord() throws IOException {
+        System.out.println("**************************************************");
+        System.out.println("writeDataRecord");
+        System.out.println("**************************************************");
         ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(
                 new File(ExcelDataSourceWriteTest.class.getResource("2.xlsx").getPath()),
                 new ExcelDataRecordMapper());
@@ -42,18 +87,6 @@ public class ExcelDataSourceWriteTest {
             .addRecord(record);
 //        source.addDataSet()
 //            .addRecord(record);
-        source.save(new FileOutputStream(new File("2.write.xlsx")));
-        
-        
-        ExcelDataSource<User> source2 = new ExcelDataSource<User>(
-                new XSSFWorkbook(),
-                new ExcelSwaggerModelMapper<User>());
-        User user = new User();
-        user.setName("羽飞");
-        user.setAge(20);
-        source2.addDataSet().addRecord(user).addRecord(user);
-//        source.addDataSet()
-//            .addRecord(record);
-        source2.save(new FileOutputStream(new File("swagger.write.xlsx")));
+        source.save(new FileOutputStream(new File("write.2.xlsx")));
     }
 }
