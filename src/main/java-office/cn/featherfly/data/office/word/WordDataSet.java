@@ -14,6 +14,7 @@ import cn.featherfly.data.core.DataSet;
  * <p>
  * Word数据集
  * </p>
+ * 
  * @param <R>
  *            数据记录
  * @author 钟冀
@@ -22,19 +23,27 @@ public class WordDataSet<R> implements DataSet<R> {
 
     private List<R> records = new ArrayList<>();
 
-    // private XWPFTable table;
+    private int index = -1;
+
+    private XWPFTable table;
+    
+    private WordDataMapper<R> mapper;
 
     /**
      * @param table
      *            XWPFTable
+     * @param index
+     *            index
      * @param mapper
      *            ExcelDataMapper
      */
-    public WordDataSet(XWPFTable table, WordDataMapper<R> mapper) {
-        // this.table = table;
+    public WordDataSet(XWPFTable table, int index, WordDataMapper<R> mapper) {
+        this.index = index;
+        this.table = table;
+        this.mapper = mapper;
         int rowNum = 1;
         for (XWPFTableRow row : table.getRows()) {
-            records.add(mapper.mapRow(row, rowNum));
+            records.add(mapper.mapRecord(row, rowNum));
             rowNum++;
         }
     }
@@ -61,5 +70,27 @@ public class WordDataSet<R> implements DataSet<R> {
     @Override
     public int getDataRecordsNumber() {
         return records.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <D extends DataSet<R>> D addRecord(R record) {
+        int rowNum = table.getNumberOfRows();
+        rowNum++;
+        XWPFTableRow row = table.createRow();
+        mapper.fillData(row, record, rowNum);
+        records.add(record);
+        return (D) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getIndex() {
+        return index;
     }
 }

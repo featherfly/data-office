@@ -52,7 +52,7 @@ public class SimpleDataRecord implements DataRecord {
     @SuppressWarnings("unchecked")
     @Override
     public <E> E get(int index) {
-        return (E) values.get(index);
+        return (E) values.getValue(index);
     }
 
     /**

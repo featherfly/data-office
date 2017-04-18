@@ -25,6 +25,10 @@ dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
     
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.15'
+    
+    compile 'cn.featherfly:featherfly-conversion-jdk8:1.0.0'
+    
+    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.13'
         
     compile 'org.slf4j:slf4j-api:1.7.25'
 

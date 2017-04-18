@@ -19,6 +19,8 @@ import cn.featherfly.data.core.DataSet;
 public class SimpleDataSet<R> implements DataSet<R> {
 
     private List<R> records = new ArrayList<>();
+    
+    private int index = -1;
 
     /**
      */
@@ -34,15 +36,13 @@ public class SimpleDataSet<R> implements DataSet<R> {
     }
 
     /**
-     * <p>
-     * 添加记录
-     * </p>
-     * 
-     * @param record
-     *            记录
+     * {@inheritDoc}
      */
-    public void addRecord(R record) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public <D extends DataSet<R>> D addRecord(R record) {
         records.add(record);
+        return (D) this;
     }
 
     /**
@@ -97,5 +97,13 @@ public class SimpleDataSet<R> implements DataSet<R> {
     @Override
     public int getDataRecordsNumber() {
         return records.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getIndex() {
+        return index;
     }
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +29,9 @@ public class WordDataSource<R> implements DataSource<WordDataSet<R>, R> {
 
     private List<WordDataSet<R>> dataSets;
 
-    // public XWPFDocument document;
+    private XWPFDocument document;
+    
+    private WordDataMapper<R> mapper;
 
     /**
      * @param document
@@ -40,9 +43,11 @@ public class WordDataSource<R> implements DataSource<WordDataSet<R>, R> {
         if (document == null) {
             throw new RuntimeException("document 不能为空");
         }
+        this.document = document;
+        this.mapper = mapper;
         dataSets = new ArrayList<WordDataSet<R>>(document.getTables().size());
         for (XWPFTable table : document.getTables()) {
-            dataSets.add(new WordDataSet<R>(table, mapper));
+            dataSets.add(new WordDataSet<R>(table, dataSets.size(), mapper));
         }
         // this.document = document;
     }
@@ -94,6 +99,25 @@ public class WordDataSource<R> implements DataSource<WordDataSet<R>, R> {
     @Override
     public int getDataSetsNumber() {
         return dataSets.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public WordDataSet<R> addDataSet() {
+        XWPFTable table = document.createTable();
+        WordDataSet<R> wordDataSet = new WordDataSet<R>(table, dataSets.size() + 1, mapper);
+        dataSets.add(wordDataSet);
+        return wordDataSet;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void save(OutputStream outputStream) throws IOException {
+        document.write(outputStream);
     }
 
 }

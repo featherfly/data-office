@@ -17,5 +17,15 @@ public interface DataMapper<R, D> {
      * @param rowNum 行数
      * @return 记录映射的对象
      */
-    R mapRow(D datasource, int rowNum);
+    R mapRecord(D datasource, int rowNum);
+    /**
+     * <p>
+     * 把数据填充到指定目标内
+     * </p>
+     * @param datasource 数据来源
+     * @param record 数据记录
+     * @param rowNum 行数
+     * @return 数据目标
+     */
+    void fillData(D datasource, R record, int rowNum);
 }

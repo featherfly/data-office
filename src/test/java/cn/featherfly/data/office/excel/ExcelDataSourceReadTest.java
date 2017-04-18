@@ -22,9 +22,9 @@ import cn.featherfly.data.office.excel.ExcelDataSource;
  *
  * @author 钟冀
  */
-public class ExcelDataSourceTest {
+public class ExcelDataSourceReadTest {
 
-    private ExcelDataSourceTest(File file) throws IOException {
+    private ExcelDataSourceReadTest(File file) throws IOException {
         Workbook w;
         try {
             w = new XSSFWorkbook(new FileInputStream(file));
@@ -58,7 +58,7 @@ public class ExcelDataSourceTest {
         // new T(new File(T.class.getResource("3.xlsx").getPath()));
         // new T(new File(T.class.getResource("3.xls").getPath()));
 
-        ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(new File(ExcelDataSourceTest.class.getResource("1.xlsx").getPath()),
+        ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(new File(ExcelDataSourceReadTest.class.getResource("1.xlsx").getPath()),
                 new ExcelDataRecordMapper());
         int dsIndex = 0;
         for (DataSet<DataRecord> dataSet : source.getDataSets()) {

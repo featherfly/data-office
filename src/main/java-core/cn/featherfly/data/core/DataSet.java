@@ -15,12 +15,29 @@ import java.util.Collection;
 public interface DataSet<R> {
     /**
      * <p>
+     * 当前dataSet的索引
+     * </p>
+     * @return 索引
+     */
+    int getIndex();
+    /**
+     * <p>
      * 获取全部数据记录
      * </p>
      * 
      * @return 全部数据记录
      */
     Collection<R> getDataRecords();
+    
+    /**
+     * <p>
+     * 添加数据记录
+     * </p>
+     * @param record 数据记录
+     * @param <D> this.class
+     * @return this
+     */
+    <D extends DataSet<R>> D addRecord(R record);
 
     /**
      * <p>

@@ -25,6 +25,12 @@ public class ExcelDataSet<R> implements DataSet<R> {
 
     private List<R> records = new ArrayList<>();
 
+    private int index = -1;
+
+    private Sheet sheet;
+
+    private ExcelDataMapper<R> mapper;
+
     /**
      * @param sheet
      *            Sheet
@@ -41,6 +47,9 @@ public class ExcelDataSet<R> implements DataSet<R> {
         if (evaluator == null) {
             throw new IllegalArgumentException("evaluator 不能为空");
         }
+        index = sheet.getWorkbook().getSheetIndex(sheet);
+        this.sheet = sheet;
+        this.mapper = mapper;
         init(sheet, evaluator, mapper);
     }
 
@@ -49,7 +58,7 @@ public class ExcelDataSet<R> implements DataSet<R> {
         for (int rIndex = 0; rIndex < rowNum; rIndex++) {
             Row row = sheet.getRow(rIndex);
             if (row != null) {
-                records.add(mapper.mapRow(row, rowNum));
+                records.add(mapper.mapRecord(row, rowNum));
             }
         }
     }
@@ -76,5 +85,25 @@ public class ExcelDataSet<R> implements DataSet<R> {
     @Override
     public int getDataRecordsNumber() {
         return records.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <D extends DataSet<R>> D addRecord(R record) {
+        Row row = sheet.createRow(sheet.getLastRowNum());
+        mapper.fillData(row, record, sheet.getLastRowNum());
+        records.add(record);
+        return (D) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getIndex() {
+        return index;
     }
 }

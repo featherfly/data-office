@@ -4,6 +4,7 @@ package cn.featherfly.data.office.excel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +35,12 @@ import cn.featherfly.data.core.DataSource;
 public class ExcelDataSource<R> implements DataSource<ExcelDataSet<R>, R> {
 
     private List<ExcelDataSet<R>> dataSets;
+    
+    private Workbook workbook;
+    
+    private ExcelDataMapper<R> mapper;
+    
+    private FormulaEvaluator evaluator;
 
     /**
      * @param workbook
@@ -45,6 +52,8 @@ public class ExcelDataSource<R> implements DataSource<ExcelDataSet<R>, R> {
         if (workbook == null) {
             throw new IllegalArgumentException("workbook 不能为空");
         }
+        this.workbook = workbook;
+        this.mapper = mapper;
         init(workbook, mapper);
     }
 
@@ -59,7 +68,7 @@ public class ExcelDataSource<R> implements DataSource<ExcelDataSet<R>, R> {
         if (file == null || !file.exists()) {
             throw new IllegalArgumentException("file 为空或文件不存在");
         }
-        Workbook workbook;
+        this.mapper = mapper;
         try {
             workbook = new XSSFWorkbook(new FileInputStream(file));
             init(workbook, mapper);
@@ -72,20 +81,19 @@ public class ExcelDataSource<R> implements DataSource<ExcelDataSet<R>, R> {
     private void init(Workbook workbook, ExcelDataMapper<R> mapper) {
         int sheetNumber = workbook.getNumberOfSheets();
         dataSets = new ArrayList<ExcelDataSet<R>>(sheetNumber);
+        if (workbook instanceof XSSFWorkbook) {
+            evaluator = new XSSFFormulaEvaluator((XSSFWorkbook) workbook);
+        } else if (workbook instanceof SXSSFWorkbook) {
+            evaluator = new SXSSFFormulaEvaluator((SXSSFWorkbook) workbook);
+        } else {
+            evaluator = new HSSFFormulaEvaluator((HSSFWorkbook) workbook);
+        }
         for (int i = 0; i < sheetNumber; i++) {
             Sheet sheet = workbook.getSheetAt(i);
-            FormulaEvaluator evaluator = null;
-            if (workbook instanceof XSSFWorkbook) {
-                evaluator = new XSSFFormulaEvaluator((XSSFWorkbook) workbook);
-            } else if (workbook instanceof SXSSFWorkbook) {
-                evaluator = new SXSSFFormulaEvaluator((SXSSFWorkbook) workbook);
-            } else {
-                evaluator = new HSSFFormulaEvaluator((HSSFWorkbook) workbook);
-            }
             dataSets.add(new ExcelDataSet<R>(sheet, evaluator, mapper));
         }
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -110,4 +118,23 @@ public class ExcelDataSource<R> implements DataSource<ExcelDataSet<R>, R> {
         return dataSets.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ExcelDataSet<R> addDataSet() {
+        Sheet sheet = workbook.createSheet();
+        ExcelDataSet<R> dataSet = new ExcelDataSet<R>(sheet, evaluator, mapper);
+        dataSets.add(dataSet);
+        return dataSet;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @throws IOException 
+     */
+    @Override
+    public void save(OutputStream outputStream) throws IOException {
+        workbook.write(outputStream);
+    }
 }
