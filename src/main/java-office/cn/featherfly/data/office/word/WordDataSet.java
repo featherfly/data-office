@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
+import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.data.core.DataSet;
 
 /**
@@ -83,6 +84,34 @@ public class WordDataSet<R> implements DataSet<R> {
         XWPFTableRow row = table.createRow();
         mapper.fillData(row, record, rowNum);
         records.add(record);
+        return (D) this;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <D extends DataSet<R>> D addRecord(R... records) {
+        if (LangUtils.isNotEmpty(records)) {
+            for (R record : records) {
+                addRecord(record);
+            }
+        }
+        return (D) this;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <D extends DataSet<R>> D addRecords(Collection<R> records) {
+        if (LangUtils.isNotEmpty(records)) {
+            for (R record : records) {
+                addRecord(record);
+            }
+        }
         return (D) this;
     }
 

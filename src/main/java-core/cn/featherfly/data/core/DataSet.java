@@ -38,6 +38,24 @@ public interface DataSet<R> {
      * @return this
      */
     <D extends DataSet<R>> D addRecord(R record);
+    /**
+     * <p>
+     * 批量添加数据记录
+     * </p>
+     * @param records 数据记录数组
+     * @param <D> this.class
+     * @return this
+     */
+    <D extends DataSet<R>> D addRecord(@SuppressWarnings("unchecked") R...records);
+    /**
+     * <p>
+     * 批量添加数据记录
+     * </p>
+     * @param records 数据记录集合
+     * @param <D> this.class
+     * @return this
+     */
+    <D extends DataSet<R>> D addRecords(Collection<R> records);
 
     /**
      * <p>

@@ -1,3 +1,9 @@
+2017-04-19
+0.1.1 发布
+	1.升级featherfly-common到1.6.0
+	2.DataSet加入addRecored(R..r)、addRecoreds(Collection<R>..r)
+	
+	
 2017-04-17
 0.1.0 发布
 	1.实现WordDataSource，只读

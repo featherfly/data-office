@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.data.core.DataSet;
 
 /**
@@ -44,35 +45,33 @@ public class SimpleDataSet<R> implements DataSet<R> {
         records.add(record);
         return (D) this;
     }
-
+    
     /**
-     * <p>
-     * 添加记录（复数）
-     * </p>
-     * 
-     * @param records
-     *            记录 可变参数
+     * {@inheritDoc}
      */
-    public void addRecords(@SuppressWarnings("unchecked") R... records) {
-        if (records != null) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public <D extends DataSet<R>> D addRecord(R... records) {
+        if (LangUtils.isNotEmpty(records)) {
             for (R record : records) {
                 addRecord(record);
             }
         }
+        return (D) this;
     }
-
+    
     /**
-     * <p>
-     * 添加记录（复数）
-     * </p>
-     * 
-     * @param records
-     *            记录集合
+     * {@inheritDoc}
      */
-    public void addRecords(Collection<R> records) {
-        if (records != null) {
-            this.records.addAll(records);
+    @Override
+    @SuppressWarnings("unchecked")
+    public <D extends DataSet<R>> D addRecords(Collection<R> records) {
+        if (LangUtils.isNotEmpty(records)) {
+            for (R record : records) {
+                addRecord(record);
+            }
         }
+        return (D) this;
     }
 
     /**

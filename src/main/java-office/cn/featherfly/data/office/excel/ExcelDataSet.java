@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
+import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.data.core.DataSet;
 
 /**
@@ -104,6 +105,34 @@ public class ExcelDataSet<R> implements DataSet<R> {
         }
         mapper.fillData(row, record, row.getRowNum());
         records.add(record);
+        return (D) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <D extends DataSet<R>> D addRecord(R... records) {
+        if (LangUtils.isNotEmpty(records)) {
+            for (R record : records) {
+                addRecord(record);
+            }
+        }
+        return (D) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <D extends DataSet<R>> D addRecords(Collection<R> records) {
+        if (LangUtils.isNotEmpty(records)) {
+            for (R record : records) {
+                addRecord(record);
+            }
+        }
         return (D) this;
     }
 
