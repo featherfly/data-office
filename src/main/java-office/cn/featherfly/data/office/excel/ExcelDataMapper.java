@@ -26,14 +26,12 @@ import cn.featherfly.data.core.DataMapper;
  * <p>
  * ExcelDataMapper
  * </p>
- * 
- * @param <R>
- *            要映射的具体类
- * 
+ *
+ * @param <R> 要映射的具体类
  * @author 钟冀
  */
 public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
-    
+
     /**
      * logger
      */
@@ -49,11 +47,9 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
      * <p>
      * 设置值到Cell里
      * </p>
-     * 
-     * @param value
-     *            值
-     * @param cell
-     *            cell
+     *
+     * @param value 值
+     * @param cell  cell
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, Cell cell) {
@@ -61,16 +57,14 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
             cell.setCellValue(conversion.toString(value, new GenericClass(value.getClass())));
         }
     }
-    
+
     /**
      * <p>
      * 返回cell的值
      * </p>
-     * 
-     * @param cell
-     *            cell
-     * @param evaluator
-     *            FormulaEvaluator
+     *
+     * @param cell      cell
+     * @param evaluator FormulaEvaluator
      * @return cell的值
      */
     @SuppressWarnings("deprecation")
@@ -80,42 +74,43 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
         }
 
         Object value = null;
+
         switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 value = cell.getStringCellValue();
                 break;
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
                     value = cell.getDateCellValue();
                 } else {
                     value = cell.getNumericCellValue();
                 }
                 break;
-            case Cell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 value = cell.getBooleanCellValue();
                 break;
-            case Cell.CELL_TYPE_BLANK:
+            case BLANK:
                 break;
-            case Cell.CELL_TYPE_ERROR:
+            case ERROR:
                 break;
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 CellValue cellValue = evaluator.evaluate(cell);
                 switch (cellValue.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
+                    case STRING:
                         value = cellValue.getStringValue();
                         break;
-                    case Cell.CELL_TYPE_NUMERIC:
+                    case NUMERIC:
                         value = cellValue.getNumberValue();
                         break;
-                    case Cell.CELL_TYPE_BOOLEAN:
+                    case BOOLEAN:
                         value = cellValue.getBooleanValue();
                         break;
-                    case Cell.CELL_TYPE_BLANK:
+                    case BLANK:
                         break;
-                    case Cell.CELL_TYPE_ERROR:
+                    case ERROR:
                         break;
                     // CELL_TYPE_FORMULA will never happen
-                    case Cell.CELL_TYPE_FORMULA:
+                    case FORMULA:
                         break;
                     default:
                         break;
@@ -126,11 +121,12 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
         }
         return value;
     }
-    
+
     /**
      * <p>
      * 获取FormulaEvaluator
      * </p>
+     *
      * @param workbook workbook
      * @return FormulaEvaluator
      */

@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.poi.POIXMLException;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ooxml.POIXMLException;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -26,27 +26,23 @@ import cn.featherfly.data.office.OfficeDataSource;
  * <p>
  * Excel数据源.支持2003,2007
  * </p>
- * 
- * @param <R>
- *            Record
  *
+ * @param <R> Record
  * @author 钟冀
  */
 public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> {
 
     private List<ExcelDataSet<R>> dataSets;
-    
+
     private Workbook workbook;
-    
+
     private ExcelDataMapper<R> mapper;
-    
+
     private FormulaEvaluator evaluator;
 
     /**
-     * @param workbook
-     *            Workbook
-     * @param mapper
-     *            ExcelDataMapper
+     * @param workbook Workbook
+     * @param mapper   ExcelDataMapper
      */
     public ExcelDataSource(Workbook workbook, ExcelDataMapper<R> mapper) {
         if (workbook == null) {
@@ -58,10 +54,8 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
     }
 
     /**
-     * @param file
-     *            文件
-     * @param mapper
-     *            ExcelDataMapper
+     * @param file   文件
+     * @param mapper ExcelDataMapper
      * @throws IOException IOException
      */
     public ExcelDataSource(File file, ExcelDataMapper<R> mapper) throws IOException {
@@ -80,7 +74,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
 
     private void init(Workbook workbook, ExcelDataMapper<R> mapper) {
         int sheetNumber = workbook.getNumberOfSheets();
-        dataSets = new ArrayList<ExcelDataSet<R>>(sheetNumber);
+        dataSets = new ArrayList<>(sheetNumber);
         if (workbook instanceof XSSFWorkbook) {
             evaluator = new XSSFFormulaEvaluator((XSSFWorkbook) workbook);
         } else if (workbook instanceof SXSSFWorkbook) {
@@ -90,10 +84,10 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
         }
         for (int i = 0; i < sheetNumber; i++) {
             Sheet sheet = workbook.getSheetAt(i);
-            dataSets.add(new ExcelDataSet<R>(sheet, evaluator, mapper));
+            dataSets.add(new ExcelDataSet<>(sheet, evaluator, mapper));
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -124,13 +118,13 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
     @Override
     public ExcelDataSet<R> addDataSet() {
         Sheet sheet = workbook.createSheet();
-        ExcelDataSet<R> dataSet = new ExcelDataSet<R>(sheet, evaluator, mapper);
+        ExcelDataSet<R> dataSet = new ExcelDataSet<>(sheet, evaluator, mapper);
         dataSets.add(dataSet);
         return dataSet;
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
     public void save(OutputStream outputStream) throws IOException {
