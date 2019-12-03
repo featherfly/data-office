@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.reflect.GenericClass;
 import cn.featherfly.conversion.core.Conversion;
-import cn.featherfly.conversion.core.ConversionPolicysJdk8;
+import cn.featherfly.conversion.core.ConversionPolicys;
 import cn.featherfly.conversion.core.TypeConversion;
 import cn.featherfly.data.core.DataMapper;
 
@@ -41,7 +41,7 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
      * conversion
      */
     @SuppressWarnings("rawtypes")
-    protected Conversion conversion = new TypeConversion(ConversionPolicysJdk8.getBasicConversionPolicy());
+    protected Conversion conversion = new TypeConversion(ConversionPolicys.getBasicConversionPolicy());
 
     /**
      * <p>
@@ -67,7 +67,6 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
      * @param evaluator FormulaEvaluator
      * @return cell的值
      */
-    @SuppressWarnings("deprecation")
     protected Object getCellValue(Cell cell, FormulaEvaluator evaluator) {
         if (cell == null) {
             return null;

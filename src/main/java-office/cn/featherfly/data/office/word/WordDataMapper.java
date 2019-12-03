@@ -6,7 +6,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import cn.featherfly.common.lang.reflect.GenericClass;
 import cn.featherfly.conversion.core.Conversion;
-import cn.featherfly.conversion.core.ConversionPolicysJdk8;
+import cn.featherfly.conversion.core.ConversionPolicys;
 import cn.featherfly.conversion.core.TypeConversion;
 import cn.featherfly.data.core.DataMapper;
 
@@ -14,26 +14,22 @@ import cn.featherfly.data.core.DataMapper;
  * <p>
  * ExcelDataMapper
  * </p>
- * 
- * @param <R>
- *            要映射的具体类
- * 
+ *
+ * @param <R> 要映射的具体类
  * @author 钟冀
  */
 public abstract class WordDataMapper<R> implements DataMapper<R, XWPFTableRow> {
 
     @SuppressWarnings("rawtypes")
-    private Conversion conversion = new TypeConversion(ConversionPolicysJdk8.getBasicConversionPolicy());
+    private Conversion conversion = new TypeConversion(ConversionPolicys.getBasicConversionPolicy());
 
     /**
      * <p>
      * 设置Cell值
      * </p>
-     * 
-     * @param value
-     *            value
-     * @param cell
-     *            cell
+     *
+     * @param value value
+     * @param cell  cell
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, XWPFTableCell cell) {

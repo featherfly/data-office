@@ -4,7 +4,7 @@ package cn.featherfly.data.impl;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.commons.collections.map.ListOrderedMap;
+import org.apache.commons.collections4.map.ListOrderedMap;
 
 import cn.featherfly.data.core.DataRecord;
 
@@ -17,7 +17,7 @@ import cn.featherfly.data.core.DataRecord;
  */
 public class SimpleDataRecord implements DataRecord {
 
-    private ListOrderedMap values = new ListOrderedMap();
+    private ListOrderedMap<String, Object> values = new ListOrderedMap<>();
 
     /**
      */
@@ -35,14 +35,12 @@ public class SimpleDataRecord implements DataRecord {
      * <p>
      * 添加记录
      * </p>
-     * 
-     * @param key
-     *            key
-     * @param value
-     *            value
+     *
+     * @param key   key
+     * @param value value
      */
     public void add(String key, Object value) {
-        this.values.put(key, value);
+        values.put(key, value);
     }
 
     /**
@@ -69,7 +67,7 @@ public class SimpleDataRecord implements DataRecord {
     @SuppressWarnings("unchecked")
     @Override
     public <E> Collection<E> getValues() {
-        return values.valueList();
+        return (Collection<E>) values.valueList();
     }
 
     /**
@@ -83,7 +81,6 @@ public class SimpleDataRecord implements DataRecord {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<String> getKeys() {
         return values.keySet();

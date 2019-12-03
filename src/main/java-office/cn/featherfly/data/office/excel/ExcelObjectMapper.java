@@ -10,21 +10,20 @@ import java.util.Map.Entry;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
-import org.springframework.util.NumberUtils;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.NumberUtils;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
 /**
  * <p>
  * ExcelSwaggerModelMapper
  * </p>
- * 
- * @param <R>
- *            要映射的具体类
+ *
+ * @param <R> 要映射的具体类
  * @author 钟冀
  */
 public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
@@ -36,32 +35,24 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
     private Class<R> type;
 
     /**
-     * @param type
-     *            Record Type Class
+     * @param type Record Type Class
      */
     public ExcelObjectMapper(Class<R> type) {
         this(type, new HashMap<>(), new ArrayList<>());
     }
 
     /**
-     * 
-     * @param type
-     *            Record Type Class
-     * @param columnPropertyNameMap
-     *            columnPropertyNameMap
+     * @param type                  Record Type Class
+     * @param columnPropertyNameMap columnPropertyNameMap
      */
     public ExcelObjectMapper(Class<R> type, Map<Integer, String> columnPropertyNameMap) {
         this(type, columnPropertyNameMap, new ArrayList<>());
     }
 
     /**
-     * 
-     * @param type
-     *            Record Type Class
-     * @param columnPropertyNameMap
-     *            columnPropertyNameMap
-     * @param titles
-     *            titles
+     * @param type                  Record Type Class
+     * @param columnPropertyNameMap columnPropertyNameMap
+     * @param titles                titles
      */
     public ExcelObjectMapper(Class<R> type, Map<Integer, String> columnPropertyNameMap, List<String> titles) {
         this.type = type;
@@ -86,8 +77,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
                     Class<?> propertyType = bd.getBeanProperty(columnPropertyName.getValue()).getType();
                     if (value.getClass() != propertyType) {
                         if (value instanceof Number) {
-                            value = NumberUtils.convertNumberToTargetClass((Number) value,
-                                    (Class<Number>) propertyType);
+                            value = NumberUtils.convert((Number) value, (Class<Number>) propertyType);
                         } else {
                             value = conversion.toObject(value.toString(), new GenericClass<>(propertyType));
                         }
@@ -126,7 +116,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
 
     /**
      * 返回columnPropertyNameMap
-     * 
+     *
      * @return columnPropertyNameMap
      */
     public Map<Integer, String> getColumnPropertyNameMap() {
@@ -135,9 +125,8 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
 
     /**
      * 设置columnPropertyNameMap
-     * 
-     * @param columnPropertyNameMap
-     *            columnPropertyNameMap
+     *
+     * @param columnPropertyNameMap columnPropertyNameMap
      */
     public void setColumnPropertyNameMap(Map<Integer, String> columnPropertyNameMap) {
         this.columnPropertyNameMap = columnPropertyNameMap;
@@ -145,7 +134,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
 
     /**
      * 返回type
-     * 
+     *
      * @return type
      */
     public Class<R> getType() {
@@ -154,7 +143,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
 
     /**
      * 返回titles
-     * 
+     *
      * @return titles
      */
     public List<String> getTitles() {
@@ -163,9 +152,8 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
 
     /**
      * 设置titles
-     * 
-     * @param titles
-     *            titles
+     *
+     * @param titles titles
      */
     public void setTitles(List<String> titles) {
         this.titles = titles;
