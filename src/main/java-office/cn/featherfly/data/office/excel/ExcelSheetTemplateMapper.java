@@ -11,24 +11,21 @@ import cn.featherfly.data.office.OfficeException;
  * <p>
  * ExcelTemplateMapper
  * </p>
- * 
- * @param <R>
- *            要映射的具体类
+ *
+ * @param <R> 要映射的具体类
  * @author 钟冀
  */
 public class ExcelSheetTemplateMapper<R> extends ExcelObjectMapper<R> {
-    
+
     /**
-     * @param type
-     *            Record Type Class
-     * @param template
-     *            Template Sheet
+     * @param type     Record Type Class
+     * @param template Template Sheet
      */
     public ExcelSheetTemplateMapper(Class<R> type, Sheet template) {
         super(type);
         Row titleRow = template.getRow(0);
         if (titleRow == null) {
-            throw new OfficeException("模板sheet第二行（标题描述）");
+            throw new OfficeException("模板sheet第一行（标题描述）");
         }
         for (short i = 0; i < titleRow.getLastCellNum(); i++) {
             Cell cell = titleRow.getCell(i);
@@ -42,6 +39,6 @@ public class ExcelSheetTemplateMapper<R> extends ExcelObjectMapper<R> {
             Cell cell = propertyNameRow.getCell(i);
             getColumnPropertyNameMap().put(new Integer(i), cell.getStringCellValue());
         }
-        
+
     }
 }
