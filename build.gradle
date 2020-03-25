@@ -1,8 +1,5 @@
 apply plugin: "java"
 
-apply from: './gradle/java_base.gradle'
-apply from: './gradle/maven_push.gradle'
-
 sourceSets {
     main {
         java {
@@ -11,6 +8,8 @@ sourceSets {
     }
 }
 
+apply from: './gradle/java_base.gradle'
+apply from: './gradle/maven_push.gradle'
 
 dependencies {
     //compile 'cn.featherfly.common:common-core:1.7.14'
