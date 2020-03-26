@@ -118,7 +118,7 @@ public class ExcelDataSourceWriteTest {
         System.out.println("**************************************************");
         ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(
                 new File(ExcelDataSourceWriteTest.class.getResource("2.xlsx").getPath()),
-                new ExcelDataRecordMapper());
+                new ExcelRecordMapper());
 //        ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(
 //                new XSSFWorkbook(),
 //                new ExcelDataRecordMapper());

@@ -11,16 +11,16 @@ import cn.featherfly.data.impl.SimpleDataRecord;
 
 /**
  * <p>
- * ExcelDataMapper
+ * ExcelRecordMapper
  * </p>
- * 
+ *
  * @author 钟冀
  */
-public class ExcelDataRecordMapper extends ExcelDataMapper<DataRecord> {
+public class ExcelRecordMapper extends ExcelDataMapper<DataRecord> {
 
     /**
      */
-    public ExcelDataRecordMapper() {
+    public ExcelRecordMapper() {
     }
 
     /**

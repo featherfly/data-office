@@ -20,7 +20,7 @@ import cn.featherfly.common.lang.reflect.GenericClass;
 
 /**
  * <p>
- * ExcelSwaggerModelMapper
+ * ExcelObjectMapper
  * </p>
  *
  * @param <R> 要映射的具体类

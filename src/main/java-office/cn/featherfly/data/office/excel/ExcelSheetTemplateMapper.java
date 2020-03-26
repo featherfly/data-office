@@ -9,7 +9,7 @@ import cn.featherfly.data.office.OfficeException;
 
 /**
  * <p>
- * ExcelTemplateMapper
+ * ExcelSheetTemplateMapper
  * </p>
  *
  * @param <R> 要映射的具体类

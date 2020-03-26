@@ -4,6 +4,7 @@ package cn.featherfly.data.office.excel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.data.office.OfficeDataSource;
 
 /**
@@ -51,6 +53,23 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
         this.workbook = workbook;
         this.mapper = mapper;
         init(workbook, mapper);
+    }
+
+    /**
+     * @param is     file input stream
+     * @param mapper ExcelDataMapper
+     * @throws IOException IOException
+     */
+    public ExcelDataSource(InputStream is, ExcelDataMapper<R> mapper) throws IOException {
+        AssertIllegalArgument.isNotEmpty(is, "file");
+        this.mapper = mapper;
+        try {
+            workbook = new XSSFWorkbook(is);
+            init(workbook, mapper);
+        } catch (POIXMLException e) {
+            workbook = new HSSFWorkbook(is);
+            init(workbook, mapper);
+        }
     }
 
     /**

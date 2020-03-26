@@ -16,10 +16,8 @@ import cn.featherfly.data.core.DataSet;
  * <p>
  * Excel数据集
  * </p>
- * 
- * @param <R>
- *            数据记录
  *
+ * @param <R> 数据记录
  * @author 钟冀
  */
 public class ExcelDataSet<R> implements DataSet<R> {
@@ -33,12 +31,9 @@ public class ExcelDataSet<R> implements DataSet<R> {
     private ExcelDataMapper<R> mapper;
 
     /**
-     * @param sheet
-     *            Sheet
-     * @param evaluator
-     *            FormulaEvaluator
-     * @param mapper
-     *            ExcelDataMapper
+     * @param sheet     Sheet
+     * @param evaluator FormulaEvaluator
+     * @param mapper    ExcelDataMapper
      */
     public ExcelDataSet(Sheet sheet, FormulaEvaluator evaluator, ExcelDataMapper<R> mapper) {
         // this.sheet = sheet;

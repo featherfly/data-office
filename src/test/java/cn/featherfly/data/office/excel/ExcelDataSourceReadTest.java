@@ -43,7 +43,7 @@ public class ExcelDataSourceReadTest {
         System.out.println("showReadDataRecord");
         System.out.println("**************************************************");
         ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(new File(ExcelDataSourceReadTest.class.getResource("1.xlsx").getPath()),
-                new ExcelDataRecordMapper());
+                new ExcelRecordMapper());
         int dsIndex = 0;
         for (DataSet<DataRecord> dataSet : source.getDataSets()) {
             int rIndex = 0;
