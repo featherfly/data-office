@@ -79,7 +79,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
                         if (value instanceof Number) {
                             value = NumberUtils.convert((Number) value, (Class<Number>) propertyType);
                         } else {
-                            value = conversion.toObject(value.toString(), new GenericClass<>(propertyType));
+                            value = conversion.targetToSource(value.toString(), new GenericClass<>(propertyType));
                         }
                     }
                     BeanUtils.setProperty(record, columnPropertyName.getValue(), value);

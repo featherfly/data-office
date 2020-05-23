@@ -5,9 +5,9 @@ import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 import cn.featherfly.common.lang.reflect.GenericClass;
-import cn.featherfly.conversion.core.Conversion;
-import cn.featherfly.conversion.core.ConversionPolicys;
-import cn.featherfly.conversion.core.TypeConversion;
+import cn.featherfly.conversion.string.ToStringConversion;
+import cn.featherfly.conversion.string.ToStringConversionPolicys;
+import cn.featherfly.conversion.string.ToStringTypeConversion;
 import cn.featherfly.data.core.DataMapper;
 
 /**
@@ -20,8 +20,8 @@ import cn.featherfly.data.core.DataMapper;
  */
 public abstract class WordDataMapper<R> implements DataMapper<R, XWPFTableRow> {
 
-    @SuppressWarnings("rawtypes")
-    private Conversion conversion = new TypeConversion(ConversionPolicys.getBasicConversionPolicy());
+    private ToStringConversion conversion = new ToStringTypeConversion(
+            ToStringConversionPolicys.getBasicConversionPolicy());
 
     /**
      * <p>
@@ -34,7 +34,7 @@ public abstract class WordDataMapper<R> implements DataMapper<R, XWPFTableRow> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, XWPFTableCell cell) {
         if (value != null) {
-            cell.setText(conversion.toString(value, new GenericClass(value.getClass())));
+            cell.setText(conversion.sourceToTarget(value, new GenericClass(value.getClass())));
         }
     }
 
