@@ -85,7 +85,7 @@
 //		System.out.println("单位基本情况：" + word.getString(0, 6, 1));
 //		in.close();
 ////		tabNum: 0	row: 0	cell: 0	单位名称
-////		tabNum: 0	row: 0	cell: 1	______成都清华高科信息技术有限公司___________
+////		tabNum: 0	row: 0	cell: 1	______成都XXXX息技术有限公司___________
 ////		tabNum: 0	row: 1	cell: 0	单位性质
 ////		tabNum: 0	row: 1	cell: 1	军工
 ////		tabNum: 0	row: 1	cell: 2	法定代表人
