@@ -5,22 +5,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.data.core.DataSet;
 
 /**
  * <p>
  * 简单数据记录
  * </p>
- * 
- * @param <R>
- *            数据记录
+ *
+ * @param <R> 数据记录
  * @author 钟冀
  */
 public class SimpleDataSet<R> implements DataSet<R> {
 
     private List<R> records = new ArrayList<>();
-    
+
     private int index = -1;
 
     /**
@@ -29,8 +28,7 @@ public class SimpleDataSet<R> implements DataSet<R> {
     }
 
     /**
-     * @param records
-     *            记录集合
+     * @param records 记录集合
      */
     public SimpleDataSet(Collection<R> records) {
         this.records.addAll(records);
@@ -45,28 +43,28 @@ public class SimpleDataSet<R> implements DataSet<R> {
         records.add(record);
         return (D) this;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("unchecked")
     public <D extends DataSet<R>> D addRecord(R... records) {
-        if (LangUtils.isNotEmpty(records)) {
+        if (Lang.isNotEmpty(records)) {
             for (R record : records) {
                 addRecord(record);
             }
         }
         return (D) this;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("unchecked")
     public <D extends DataSet<R>> D addRecords(Collection<R> records) {
-        if (LangUtils.isNotEmpty(records)) {
+        if (Lang.isNotEmpty(records)) {
             for (R record : records) {
                 addRecord(record);
             }
