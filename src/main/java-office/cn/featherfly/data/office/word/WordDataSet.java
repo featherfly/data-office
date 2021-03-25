@@ -8,16 +8,15 @@ import java.util.List;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.data.core.DataSet;
 
 /**
  * <p>
  * Word数据集
  * </p>
- * 
- * @param <R>
- *            数据记录
+ *
+ * @param <R> 数据记录
  * @author 钟冀
  */
 public class WordDataSet<R> implements DataSet<R> {
@@ -27,16 +26,13 @@ public class WordDataSet<R> implements DataSet<R> {
     private int index = -1;
 
     private XWPFTable table;
-    
+
     private WordDataMapper<R> mapper;
 
     /**
-     * @param table
-     *            XWPFTable
-     * @param index
-     *            index
-     * @param mapper
-     *            ExcelDataMapper
+     * @param table  XWPFTable
+     * @param index  index
+     * @param mapper ExcelDataMapper
      */
     public WordDataSet(XWPFTable table, int index, WordDataMapper<R> mapper) {
         this.index = index;
@@ -86,28 +82,28 @@ public class WordDataSet<R> implements DataSet<R> {
         records.add(record);
         return (D) this;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("unchecked")
     public <D extends DataSet<R>> D addRecord(R... records) {
-        if (LangUtils.isNotEmpty(records)) {
+        if (Lang.isNotEmpty(records)) {
             for (R record : records) {
                 addRecord(record);
             }
         }
         return (D) this;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     @SuppressWarnings("unchecked")
     public <D extends DataSet<R>> D addRecords(Collection<R> records) {
-        if (LangUtils.isNotEmpty(records)) {
+        if (Lang.isNotEmpty(records)) {
             for (R record : records) {
                 addRecord(record);
             }

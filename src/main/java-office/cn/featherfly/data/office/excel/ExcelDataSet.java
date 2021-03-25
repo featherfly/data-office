@@ -9,17 +9,15 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.data.core.DataSet;
 
 /**
  * <p>
  * Excel数据集
  * </p>
- * 
- * @param <R>
- *            数据记录
  *
+ * @param <R> 数据记录
  * @author 钟冀
  */
 public class ExcelDataSet<R> implements DataSet<R> {
@@ -33,12 +31,9 @@ public class ExcelDataSet<R> implements DataSet<R> {
     private ExcelDataMapper<R> mapper;
 
     /**
-     * @param sheet
-     *            Sheet
-     * @param evaluator
-     *            FormulaEvaluator
-     * @param mapper
-     *            ExcelDataMapper
+     * @param sheet     Sheet
+     * @param evaluator FormulaEvaluator
+     * @param mapper    ExcelDataMapper
      */
     public ExcelDataSet(Sheet sheet, FormulaEvaluator evaluator, ExcelDataMapper<R> mapper) {
         // this.sheet = sheet;
@@ -95,13 +90,15 @@ public class ExcelDataSet<R> implements DataSet<R> {
     @Override
     public <D extends DataSet<R>> D addRecord(R record) {
         Row row = null;
-        if (records.isEmpty()) {
+        if (sheet.getLastRowNum() == -1) {
+            row = sheet.createRow(sheet.getLastRowNum() + 1);
+        } else {
             row = sheet.getRow(sheet.getLastRowNum());
             if (row == null) {
                 row = sheet.createRow(sheet.getLastRowNum());
+            } else {
+                row = sheet.createRow(sheet.getLastRowNum() + 1);
             }
-        } else {
-            row = sheet.createRow(sheet.getLastRowNum() + 1);
         }
         mapper.fillData(row, record, row.getRowNum());
         records.add(record);
@@ -114,7 +111,7 @@ public class ExcelDataSet<R> implements DataSet<R> {
     @Override
     @SuppressWarnings("unchecked")
     public <D extends DataSet<R>> D addRecord(R... records) {
-        if (LangUtils.isNotEmpty(records)) {
+        if (Lang.isNotEmpty(records)) {
             for (R record : records) {
                 addRecord(record);
             }
@@ -128,7 +125,7 @@ public class ExcelDataSet<R> implements DataSet<R> {
     @Override
     @SuppressWarnings("unchecked")
     public <D extends DataSet<R>> D addRecords(Collection<R> records) {
-        if (LangUtils.isNotEmpty(records)) {
+        if (Lang.isNotEmpty(records)) {
             for (R record : records) {
                 addRecord(record);
             }

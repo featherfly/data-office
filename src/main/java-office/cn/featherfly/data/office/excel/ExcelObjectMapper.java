@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.NumberUtils;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
@@ -96,7 +96,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
      */
     @Override
     public void fillData(Row row, R record, int rowNum) {
-        if (LangUtils.isNotEmpty(titles) && rowNum == 0) {
+        if (Lang.isNotEmpty(titles) && rowNum == 0) {
             for (int i = 0; i < titles.size(); i++) {
                 String title = titles.get(i);
                 Cell cell = row.createCell(i);
