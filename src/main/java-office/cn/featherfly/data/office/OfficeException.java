@@ -9,7 +9,7 @@ import cn.featherfly.common.exception.LocalizedException;
  * <p>
  * OfficeException
  * </p>
- * 
+ *
  * @author 钟冀
  */
 public class OfficeException extends LocalizedException {
@@ -17,17 +17,9 @@ public class OfficeException extends LocalizedException {
     private static final long serialVersionUID = 3514407639691650897L;
 
     /**
-     * 
-     */
-    public OfficeException() {
-        super();
-
-    }
-
-    /**
      * @param message message
-     * @param locale locale
-     * @param ex ex
+     * @param locale  locale
+     * @param ex      ex
      */
     public OfficeException(String message, Locale locale, Throwable ex) {
         super(message, locale, ex);
@@ -36,7 +28,7 @@ public class OfficeException extends LocalizedException {
 
     /**
      * @param message message
-     * @param locale locale
+     * @param locale  locale
      */
     public OfficeException(String message, Locale locale) {
         super(message, locale);
@@ -45,9 +37,9 @@ public class OfficeException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus argus
-     * @param locale locale
-     * @param ex ex
+     * @param argus   argus
+     * @param locale  locale
+     * @param ex      ex
      */
     public OfficeException(String message, Object[] argus, Locale locale, Throwable ex) {
         super(message, argus, locale, ex);
@@ -56,8 +48,8 @@ public class OfficeException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus argus
-     * @param locale locale
+     * @param argus   argus
+     * @param locale  locale
      */
     public OfficeException(String message, Object[] argus, Locale locale) {
         super(message, argus, locale);
@@ -66,8 +58,8 @@ public class OfficeException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus argus
-     * @param ex ex
+     * @param argus   argus
+     * @param ex      ex
      */
     public OfficeException(String message, Object[] argus, Throwable ex) {
         super(message, argus, ex);
@@ -76,7 +68,7 @@ public class OfficeException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus argus
+     * @param argus   argus
      */
     public OfficeException(String message, Object[] argus) {
         super(message, argus);
@@ -85,7 +77,7 @@ public class OfficeException extends LocalizedException {
 
     /**
      * @param message message
-     * @param ex ex
+     * @param ex      ex
      */
     public OfficeException(String message, Throwable ex) {
         super(message, ex);
