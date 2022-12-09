@@ -16,7 +16,7 @@ import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.NumberUtils;
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
 
 /**
  * <p>
@@ -79,7 +79,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
                         if (value instanceof Number) {
                             value = NumberUtils.convert((Number) value, (Class<Number>) propertyType);
                         } else {
-                            value = conversion.targetToSource(value.toString(), new GenericClass<>(propertyType));
+                            value = conversion.targetToSource(value.toString(), new ClassType<>(propertyType));
                         }
                     }
                     BeanUtils.setProperty(record, columnPropertyName.getValue(), value);

@@ -4,7 +4,7 @@ package cn.featherfly.data.office.word;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
 import cn.featherfly.conversion.string.ToStringConversion;
 import cn.featherfly.conversion.string.ToStringConversionPolicys;
 import cn.featherfly.conversion.string.ToStringTypeConversion;
@@ -34,7 +34,7 @@ public abstract class WordDataMapper<R> implements DataMapper<R, XWPFTableRow> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, XWPFTableCell cell) {
         if (value != null) {
-            cell.setText(conversion.sourceToTarget(value, new GenericClass(value.getClass())));
+            cell.setText(conversion.sourceToTarget(value, new ClassType(value.getClass())));
         }
     }
 

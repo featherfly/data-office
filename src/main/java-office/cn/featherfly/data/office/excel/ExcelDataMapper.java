@@ -16,7 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
 import cn.featherfly.conversion.string.ToStringConversion;
 import cn.featherfly.conversion.string.ToStringConversionPolicys;
 import cn.featherfly.conversion.string.ToStringTypeConversion;
@@ -54,7 +54,7 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, Cell cell) {
         if (value != null) {
-            cell.setCellValue(conversion.sourceToTarget(value, new GenericClass(value.getClass())));
+            cell.setCellValue(conversion.sourceToTarget(value, new ClassType(value.getClass())));
         }
     }
 
