@@ -54,13 +54,13 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
         if (record != null) {
             BeanDescriptor<?> beanDescriptor = BeanDescriptor.getBeanDescriptor(record.getClass());
 
-            Collection<BeanProperty<?>> beanProperties = getApiModelBeanProperties(beanDescriptor);
+            Collection<BeanProperty<?, ?>> beanProperties = getApiModelBeanProperties(beanDescriptor);
             int index = 0;
             if (insertTitleRow && rowNum == 0) {
                 CellStyle cellStyle = row.getSheet().getWorkbook().createCellStyle();
                 cellStyle.setAlignment(HorizontalAlignment.CENTER);
                 // 第一行的时候再把标题添加进去
-                for (BeanProperty<?> beanProperty : beanProperties) {
+                for (BeanProperty<?, ?> beanProperty : beanProperties) {
                     ApiModelProperty apiModelProperty = beanProperty.getAnnotation(ApiModelProperty.class);
                     Cell cell = row.createCell(index);
                     cell.setCellStyle(cellStyle);
@@ -71,7 +71,7 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
                 index = 0;
             }
 
-            for (BeanProperty<?> beanProperty : beanProperties) {
+            for (BeanProperty<?, ?> beanProperty : beanProperties) {
                 Cell cell = row.createCell(index);
                 Object object = beanProperty.getValue(record);
                 setCellValue(object, cell);
@@ -98,7 +98,7 @@ public class ExcelSwaggerModelMapper<R> extends ExcelDataMapper<R> {
         this.insertTitleRow = insertTitleRow;
     }
 
-    private Collection<BeanProperty<?>> getApiModelBeanProperties(BeanDescriptor<?> beanDescriptor) {
+    private Collection<BeanProperty<?, ?>> getApiModelBeanProperties(BeanDescriptor<?> beanDescriptor) {
         return beanDescriptor.findBeanPropertys(new BeanPropertyAnnotationMatcher(ApiModelProperty.class));
     }
 }
