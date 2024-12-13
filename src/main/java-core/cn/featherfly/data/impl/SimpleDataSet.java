@@ -3,6 +3,7 @@ package cn.featherfly.data.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import cn.featherfly.common.lang.Lang;
@@ -12,25 +13,39 @@ import cn.featherfly.data.core.DataSet;
  * <p>
  * 简单数据记录
  * </p>
+ * .
  *
- * @param <R> 数据记录
  * @author 钟冀
+ * @param <R> 数据记录
  */
 public class SimpleDataSet<R> implements DataSet<R> {
 
-    private List<R> records = new ArrayList<>();
+    private final List<R> records = new ArrayList<>();
 
-    private int index = -1;
+    private final int index;
+
+    private final String name;
 
     /**
+     * Instantiates a new simple data set.
+     *
+     * @param index the index
+     * @param name the name
      */
-    public SimpleDataSet() {
+    public SimpleDataSet(int index, String name) {
+        this(index, name, Collections.emptyList());
     }
 
     /**
+     * Instantiates a new simple data set.
+     *
+     * @param index the index
+     * @param name the name
      * @param records 记录集合
      */
-    public SimpleDataSet(Collection<R> records) {
+    public SimpleDataSet(int index, String name, Collection<R> records) {
+        this.index = index;
+        this.name = name;
         this.records.addAll(records);
     }
 
@@ -102,5 +117,13 @@ public class SimpleDataSet<R> implements DataSet<R> {
     @Override
     public int getIndex() {
         return index;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return name;
     }
 }

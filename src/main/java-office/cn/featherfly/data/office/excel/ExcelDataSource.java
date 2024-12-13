@@ -5,10 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+import org.apache.commons.collections4.map.ListOrderedMap;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ooxml.POIXMLException;
@@ -23,16 +22,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import cn.featherfly.data.office.OfficeDataSource;
 
 /**
- * <p>
- * Excel数据源.支持2003,2007
- * </p>
+ * Excel数据源.支持2003,2007.
  *
  * @param <R> Record
  * @author 钟冀
  */
 public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> {
 
-    private List<ExcelDataSet<R>> dataSets;
+    private ListOrderedMap<String, ExcelDataSet<R>> dataSets;
 
     private Workbook workbook;
 
@@ -42,7 +39,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
 
     /**
      * @param workbook Workbook
-     * @param mapper   ExcelDataMapper
+     * @param mapper ExcelDataMapper
      */
     public ExcelDataSource(Workbook workbook, ExcelDataMapper<R> mapper) {
         if (workbook == null) {
@@ -54,7 +51,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
     }
 
     /**
-     * @param file   文件
+     * @param file 文件
      * @param mapper ExcelDataMapper
      * @throws IOException IOException
      */
@@ -74,7 +71,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
 
     private void init(Workbook workbook, ExcelDataMapper<R> mapper) {
         int sheetNumber = workbook.getNumberOfSheets();
-        dataSets = new ArrayList<>(sheetNumber);
+        dataSets = new ListOrderedMap<>();
         if (workbook instanceof XSSFWorkbook) {
             evaluator = new XSSFFormulaEvaluator((XSSFWorkbook) workbook);
         } else if (workbook instanceof SXSSFWorkbook) {
@@ -84,7 +81,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
         }
         for (int i = 0; i < sheetNumber; i++) {
             Sheet sheet = workbook.getSheetAt(i);
-            dataSets.add(new ExcelDataSet<>(sheet, evaluator, mapper));
+            dataSets.put(sheet.getSheetName(), new ExcelDataSet<>(sheet, evaluator, mapper));
         }
     }
 
@@ -93,7 +90,15 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
      */
     @Override
     public ExcelDataSet<R> getDataSet(int index) {
-        return dataSets.get(index);
+        return dataSets.getValue(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ExcelDataSet<R> getDataSet(String name) {
+        return dataSets.get(name);
     }
 
     /**
@@ -101,7 +106,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
      */
     @Override
     public Collection<ExcelDataSet<R>> getDataSets() {
-        return dataSets;
+        return dataSets.values();
     }
 
     /**
@@ -116,10 +121,10 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
      * {@inheritDoc}
      */
     @Override
-    public ExcelDataSet<R> addDataSet() {
-        Sheet sheet = workbook.createSheet();
+    public ExcelDataSet<R> addDataSet(String name) {
+        Sheet sheet = workbook.createSheet(name);
         ExcelDataSet<R> dataSet = new ExcelDataSet<>(sheet, evaluator, mapper);
-        dataSets.add(dataSet);
+        dataSets.put(sheet.getSheetName(), dataSet);
         return dataSet;
     }
 

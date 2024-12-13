@@ -1,80 +1,79 @@
 
 package cn.featherfly.data.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.LinkedHashMap;
+
+import org.apache.commons.collections4.map.ListOrderedMap;
 
 import cn.featherfly.data.core.DataSet;
 import cn.featherfly.data.core.DataSource;
 
 /**
- * <p>
  * 简单数据源.
- * </p>
  *
- * @param <D>
- *            DataSet
- * @param <R>
- *            Record
  * @author 钟冀
+ * @param <D> DataSet
+ * @param <R> Record
  */
 public class SimpleDataSource<D extends DataSet<R>, R> implements DataSource<D, R> {
 
-    private List<D> dataSets = new ArrayList<>();
+    private final ListOrderedMap<String, D> dataSets = new ListOrderedMap<>();
 
     /**
+     * Instantiates a new simple data source.
      */
     public SimpleDataSource() {
     }
 
     /**
-     * @param dataSets
-     *            数据集集合
+     * Instantiates a new simple data source.
+     *
+     * @param dataSets 数据集集合
      */
-    public SimpleDataSource(Collection<D> dataSets) {
-        this.dataSets.addAll(dataSets);
+    public SimpleDataSource(LinkedHashMap<String, D> dataSets) {
+        this.dataSets.putAll(dataSets);
     }
 
     /**
-     * <p>
-     * 添加数据集
-     * </p>
-     * 
+     * 添加数据集.
+     *
      * @param record
-     *            数据集
+     *        数据集
      */
     public void addDataSet(D record) {
-        dataSets.add(record);
+        // TODO 这里设置record index
+        dataSets.put(record.getName(), record);
     }
 
     /**
      * <p>
      * 添加数据集（复数）
      * </p>
-     * 
-     * @param dataSets
-     *            数据集可变参数
+     * .
+     *
+     * @param dataSets 数据集可变参数
      */
     public void addDataSets(@SuppressWarnings("unchecked") D... dataSets) {
-        if (dataSets != null) {
-            for (D record : dataSets) {
-                addDataSet(record);
-            }
+        if (dataSets == null) {
+            return;
+        }
+        for (D record : dataSets) {
+            addDataSet(record);
         }
     }
 
     /**
-     * <p>
-     * 添加数据集（复数）
-     * </p>
-     * 
-     * @param dataSets
-     *            数据集集合
+     * 添加数据集（复数）.
+     *
+     * @param dataSets 数据集集合
      */
     public void addDataSets(Collection<D> dataSets) {
-        if (dataSets != null) {
-            this.dataSets.addAll(dataSets);
+        if (dataSets == null) {
+            return;
+        }
+        for (D record : dataSets) {
+            addDataSet(record);
         }
     }
 
@@ -83,7 +82,15 @@ public class SimpleDataSource<D extends DataSet<R>, R> implements DataSource<D, 
      */
     @Override
     public D getDataSet(int index) {
-        return dataSets.get(index);
+        return dataSets.getValue(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public D getDataSet(String name) {
+        return dataSets.get(name);
     }
 
     /**
@@ -91,7 +98,7 @@ public class SimpleDataSource<D extends DataSet<R>, R> implements DataSource<D, 
      */
     @Override
     public Collection<D> getDataSets() {
-        return dataSets;
+        return dataSets.values();
     }
 
     /**
@@ -106,7 +113,7 @@ public class SimpleDataSource<D extends DataSet<R>, R> implements DataSource<D, 
      * {@inheritDoc}
      */
     @Override
-    public D addDataSet() {
+    public D addDataSet(String name) {
         throw new UnsupportedOperationException();
     }
 }

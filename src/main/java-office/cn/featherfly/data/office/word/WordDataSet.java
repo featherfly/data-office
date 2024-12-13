@@ -12,9 +12,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.data.core.DataSet;
 
 /**
- * <p>
- * Word数据集
- * </p>
+ * Word数据集.
  *
  * @param <R> 数据记录
  * @author 钟冀
@@ -30,8 +28,8 @@ public class WordDataSet<R> implements DataSet<R> {
     private WordDataMapper<R> mapper;
 
     /**
-     * @param table  XWPFTable
-     * @param index  index
+     * @param table XWPFTable
+     * @param index index
      * @param mapper ExcelDataMapper
      */
     public WordDataSet(XWPFTable table, int index, WordDataMapper<R> mapper) {
@@ -117,5 +115,13 @@ public class WordDataSet<R> implements DataSet<R> {
     @Override
     public int getIndex() {
         return index;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        throw new UnsupportedOperationException();
     }
 }

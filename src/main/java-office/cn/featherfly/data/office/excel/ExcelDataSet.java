@@ -13,27 +13,27 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.data.core.DataSet;
 
 /**
- * <p>
- * Excel数据集
- * </p>
+ * Excel数据集.
  *
  * @param <R> 数据记录
  * @author 钟冀
  */
 public class ExcelDataSet<R> implements DataSet<R> {
 
-    private List<R> records = new ArrayList<>();
+    private final List<R> records = new ArrayList<>();
 
-    private int index = -1;
+    private final int index;
 
-    private Sheet sheet;
+    private final String name;
 
-    private ExcelDataMapper<R> mapper;
+    private final Sheet sheet;
+
+    private final ExcelDataMapper<R> mapper;
 
     /**
-     * @param sheet     Sheet
+     * @param sheet Sheet
      * @param evaluator FormulaEvaluator
-     * @param mapper    ExcelDataMapper
+     * @param mapper ExcelDataMapper
      */
     public ExcelDataSet(Sheet sheet, FormulaEvaluator evaluator, ExcelDataMapper<R> mapper) {
         // this.sheet = sheet;
@@ -44,6 +44,7 @@ public class ExcelDataSet<R> implements DataSet<R> {
             throw new IllegalArgumentException("evaluator 不能为空");
         }
         index = sheet.getWorkbook().getSheetIndex(sheet);
+        name = sheet.getSheetName();
         this.sheet = sheet;
         this.mapper = mapper;
         init(sheet, evaluator, mapper);
@@ -139,5 +140,13 @@ public class ExcelDataSet<R> implements DataSet<R> {
     @Override
     public int getIndex() {
         return index;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return name;
     }
 }

@@ -16,13 +16,10 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import cn.featherfly.data.office.OfficeDataSource;
 
 /**
- * <p>
  * Word数据源. 只支持2007以及以后的格式，不支持2003.
- * </p>
- * 
- * @param <R>
- *            要映射的具体类
  *
+ * @param <R>
+ *        要映射的具体类
  * @author 钟冀
  */
 public class WordDataSource<R> implements OfficeDataSource<WordDataSet<R>, R> {
@@ -30,14 +27,14 @@ public class WordDataSource<R> implements OfficeDataSource<WordDataSet<R>, R> {
     private List<WordDataSet<R>> dataSets;
 
     private XWPFDocument document;
-    
+
     private WordDataMapper<R> mapper;
 
     /**
      * @param document
-     *            XWPFDocument
+     *        XWPFDocument
      * @param mapper
-     *            ExcelDataMapper
+     *        ExcelDataMapper
      */
     public WordDataSource(XWPFDocument document, WordDataMapper<R> mapper) {
         if (document == null) {
@@ -45,20 +42,20 @@ public class WordDataSource<R> implements OfficeDataSource<WordDataSet<R>, R> {
         }
         this.document = document;
         this.mapper = mapper;
-        dataSets = new ArrayList<WordDataSet<R>>(document.getTables().size());
+        dataSets = new ArrayList<>(document.getTables().size());
         for (XWPFTable table : document.getTables()) {
-            dataSets.add(new WordDataSet<R>(table, dataSets.size(), mapper));
+            dataSets.add(new WordDataSet<>(table, dataSets.size(), mapper));
         }
         // this.document = document;
     }
 
     /**
      * @param is
-     *            输入流
+     *        输入流
      * @param mapper
-     *            ExcelDataMapper
+     *        ExcelDataMapper
      * @throws IOException
-     *             IOException
+     *         IOException
      */
     public WordDataSource(InputStream is, WordDataMapper<R> mapper) throws IOException {
         this(new XWPFDocument(is), mapper);
@@ -67,11 +64,11 @@ public class WordDataSource<R> implements OfficeDataSource<WordDataSet<R>, R> {
 
     /**
      * @param file
-     *            文件
+     *        文件
      * @param mapper
-     *            ExcelDataMapper
+     *        ExcelDataMapper
      * @throws IOException
-     *             IOException
+     *         IOException
      */
     public WordDataSource(File file, WordDataMapper<R> mapper) throws IOException {
         this(new FileInputStream(file), mapper);
@@ -83,6 +80,14 @@ public class WordDataSource<R> implements OfficeDataSource<WordDataSet<R>, R> {
     @Override
     public WordDataSet<R> getDataSet(int index) {
         return dataSets.get(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public WordDataSet<R> getDataSet(String name) {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -105,9 +110,9 @@ public class WordDataSource<R> implements OfficeDataSource<WordDataSet<R>, R> {
      * {@inheritDoc}
      */
     @Override
-    public WordDataSet<R> addDataSet() {
+    public WordDataSet<R> addDataSet(String name) {
         XWPFTable table = document.createTable();
-        WordDataSet<R> wordDataSet = new WordDataSet<R>(table, dataSets.size() + 1, mapper);
+        WordDataSet<R> wordDataSet = new WordDataSet<>(table, dataSets.size() + 1, mapper);
         dataSets.add(wordDataSet);
         return wordDataSet;
     }
