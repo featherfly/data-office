@@ -19,6 +19,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.data.office.OfficeDataSource;
 
 /**
@@ -122,7 +123,7 @@ public class ExcelDataSource<R> implements OfficeDataSource<ExcelDataSet<R>, R> 
      */
     @Override
     public ExcelDataSet<R> addDataSet(String name) {
-        Sheet sheet = workbook.createSheet(name);
+        Sheet sheet = Lang.isEmpty(name) ? workbook.createSheet() : workbook.createSheet(name);
         ExcelDataSet<R> dataSet = new ExcelDataSet<>(sheet, evaluator, mapper);
         dataSets.put(sheet.getSheetName(), dataSet);
         return dataSet;

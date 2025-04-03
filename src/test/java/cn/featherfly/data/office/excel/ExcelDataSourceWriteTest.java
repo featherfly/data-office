@@ -8,23 +8,19 @@ import java.io.IOException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import cn.featherfly.common.structure.HashChainMap;
+import cn.featherfly.common.structure.ChainMapImpl;
 import cn.featherfly.data.core.DataRecord;
 import cn.featherfly.data.impl.SimpleDataRecord;
 
 /**
- * <p>
- * ExcelDataSourceWriteTest
- * </p>
+ * ExcelDataSourceWriteTest.
  *
  * @author 钟冀
  */
 public class ExcelDataSourceWriteTest {
 
     /**
-     * <p>
      * 方法的说明
-     * </p>
      *
      * @param args args
      * @throws IOException IOException
@@ -42,7 +38,7 @@ public class ExcelDataSourceWriteTest {
         System.out.println("**************************************************");
 
         try (XSSFWorkbook t = new XSSFWorkbook(
-                new File(ExcelDataSourceReadTest.class.getResource("sheet_template.xlsx").getPath()))) {
+            new File(ExcelDataSourceReadTest.class.getResource("sheet_template.xlsx").getPath()))) {
             ExcelSheetTemplateMapper<User> mapper = new ExcelSheetTemplateMapper<>(User.class, t.getSheetAt(1));
             try (XSSFWorkbook workbook = new XSSFWorkbook()) {
                 ExcelDataSource<User> source = new ExcelDataSource<>(workbook, mapper);
@@ -56,18 +52,18 @@ public class ExcelDataSourceWriteTest {
                 user3.setName("羽飞3");
                 user3.setAge(13);
 
-                source.addDataSet().addRecord(user).addRecord(user2).addRecord(user3);
+                source.addDataSet("sheet1").addRecord(user).addRecord(user2).addRecord(user3);
 
                 source.save(new FileOutputStream(new File("write.template.xlsx")));
             }
         }
 
         ExcelDataSource<User> source = new ExcelDataSource<>(new XSSFWorkbook(), new ExcelObjectMapper<>(User.class,
-                new HashChainMap<Integer, String>().putChain(0, "name").putChain(1, "age")));
+            new ChainMapImpl<Integer, String>().putChain(0, "name").putChain(1, "age")));
         User user = new User();
         user.setName("羽飞2");
         user.setAge(22);
-        source.addDataSet().addRecord(user).addRecord(user);
+        source.addDataSet("sheet2").addRecord(user).addRecord(user);
         source.save(new FileOutputStream(new File("write.object.xlsx")));
     }
 
@@ -77,11 +73,11 @@ public class ExcelDataSourceWriteTest {
         System.out.println("**************************************************");
 
         ExcelDataSource<User> source = new ExcelDataSource<>(new XSSFWorkbook(), new ExcelObjectMapper<>(User.class,
-                new HashChainMap<Integer, String>().putChain(0, "name").putChain(1, "age")));
+            new ChainMapImpl<Integer, String>().putChain(0, "name").putChain(1, "age")));
         User user = new User();
         user.setName("羽飞2");
         user.setAge(22);
-        source.addDataSet().addRecord(user).addRecord(user);
+        source.addDataSet("objectMapper").addRecord(user).addRecord(user);
         source.save(new FileOutputStream(new File("write.object.xlsx")));
     }
 
@@ -97,7 +93,7 @@ public class ExcelDataSourceWriteTest {
         User user2 = new User();
         user2.setName("yufei");
         user2.setAge(18);
-        source.addDataSet().addRecord(user).addRecord(user2);
+        source.addDataSet("swaggerModelMapper").addRecord(user).addRecord(user2);
         source.save(new FileOutputStream(new File("write.swagger.xlsx")));
     }
 
@@ -106,7 +102,7 @@ public class ExcelDataSourceWriteTest {
         System.out.println("writeDataRecord");
         System.out.println("**************************************************");
         ExcelDataSource<DataRecord> source = new ExcelDataSource<>(
-                new File(ExcelDataSourceWriteTest.class.getResource("2.xlsx").getPath()), new ExcelDataRecordMapper());
+            new File(ExcelDataSourceWriteTest.class.getResource("2.xlsx").getPath()), new ExcelDataRecordMapper());
         //        ExcelDataSource<DataRecord> source = new ExcelDataSource<DataRecord>(
         //                new XSSFWorkbook(),
         //                new ExcelDataRecordMapper());
@@ -115,7 +111,7 @@ public class ExcelDataSourceWriteTest {
         record.add("age", 18);
         source.getDataSet(0).addRecord(record).addRecord(record);
         source.getDataSet(1).addRecord(record).addRecord(record);
-        source.addDataSet().addRecord(record);
+        source.addDataSet("newSheet").addRecord(record);
         //        source.addDataSet()
         //            .addRecord(record);
         source.save(new FileOutputStream(new File("write.2.xlsx")));

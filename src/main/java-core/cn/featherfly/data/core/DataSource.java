@@ -38,6 +38,16 @@ public interface DataSource<D extends DataSet<R>, R> {
      * @param name the name
      * @return 新添加的数据集
      */
+    default D addDataSet() {
+        return addDataSet(null);
+    }
+
+    /**
+     * 添加数据集.
+     *
+     * @param name the name
+     * @return 新添加的数据集
+     */
     D addDataSet(String name);
 
     /**

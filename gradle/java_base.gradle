@@ -1,14 +1,6 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
-repositories {
-    mavenLocal()
-    maven {
-        url  "https://maven.aliyun.com/repository/public"
-    }
-    mavenCentral()
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 

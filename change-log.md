@@ -1,6 +1,7 @@
 # 0.2.0
 1. DataSource加入getDataSet(String)
 2. DataSet加入getName()
+3. ExcelSwaggerModelMapper加入AllowPolicy用于自定义输出对象属性
 
 # 0.1.9 2024-06-21
 1. 加入ExcelOpenApiModelMapper

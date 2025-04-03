@@ -15,13 +15,11 @@ import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.NumberUtils;
+import cn.featherfly.common.lang.Num;
 import cn.featherfly.common.lang.reflect.ClassType;
 
 /**
- * <p>
- * ExcelSwaggerModelMapper
- * </p>
+ * ExcelSwaggerModelMapper.
  *
  * @param <R> 要映射的具体类
  * @author 钟冀
@@ -42,7 +40,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
     }
 
     /**
-     * @param type                  Record Type Class
+     * @param type Record Type Class
      * @param columnPropertyNameMap columnPropertyNameMap
      */
     public ExcelObjectMapper(Class<R> type, Map<Integer, String> columnPropertyNameMap) {
@@ -50,9 +48,9 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
     }
 
     /**
-     * @param type                  Record Type Class
+     * @param type Record Type Class
      * @param columnPropertyNameMap columnPropertyNameMap
-     * @param titles                titles
+     * @param titles titles
      */
     public ExcelObjectMapper(Class<R> type, Map<Integer, String> columnPropertyNameMap, List<String> titles) {
         this.type = type;
@@ -77,7 +75,7 @@ public class ExcelObjectMapper<R> extends ExcelDataMapper<R> {
                     Class<?> propertyType = bd.getBeanProperty(columnPropertyName.getValue()).getType();
                     if (value.getClass() != propertyType) {
                         if (value instanceof Number) {
-                            value = NumberUtils.convert((Number) value, (Class<Number>) propertyType);
+                            value = Num.convert((Number) value, (Class<Number>) propertyType);
                         } else {
                             value = conversion.targetToSource(value.toString(), new ClassType<>(propertyType));
                         }

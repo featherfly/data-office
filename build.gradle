@@ -11,6 +11,7 @@ sourceSets {
 
 
 dependencies {
+    api 'cn.featherfly.common:common-core:1.14.0'
     api 'cn.featherfly:featherfly-conversion:1.5.0'
     //compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
     //compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.15'

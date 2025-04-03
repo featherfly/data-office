@@ -19,19 +19,19 @@ import cn.featherfly.data.impl.SimpleDataRecord;
  */
 public class WordDataSourceWriteTest {
     public static void main(String[] args) throws IOException {
-        WordDataSource<DataRecord> source = new WordDataSource<DataRecord>(
-                new XWPFDocument(), new WordDataRecordMapper());
+        WordDataSource<DataRecord> source = new WordDataSource<>(
+            new XWPFDocument(), new WordDataRecordMapper());
         SimpleDataRecord record = new SimpleDataRecord();
         record.add("name", "yufei");
         record.add("age", 18);
-        
+
         SimpleDataRecord record2 = new SimpleDataRecord();
         record2.add("name", "yufei222");
         record2.add("age", 22);
         record2.add("sex", "male");
-        
-        source.addDataSet().addRecord(record).addRecord(record2);
-        
+
+        source.addDataSet("table1").addRecord(record).addRecord(record2);
+
         source.save(new FileOutputStream(new File("write.recored.docx")));
     }
 }

@@ -41,7 +41,7 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
      * conversion
      */
     protected ToStringConversion conversion = new ToStringTypeConversion(
-            ToStringConversionPolicys.getBasicConversionPolicy());
+        ToStringConversionPolicys.getBasicConversionPolicy());
 
     /**
      * <p>
@@ -49,7 +49,7 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
      * </p>
      *
      * @param value 值
-     * @param cell  cell
+     * @param cell cell
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setCellValue(Object value, Cell cell) {
@@ -63,7 +63,7 @@ public abstract class ExcelDataMapper<R> implements DataMapper<R, Row> {
      * 返回cell的值
      * </p>
      *
-     * @param cell      cell
+     * @param cell cell
      * @param evaluator FormulaEvaluator
      * @return cell的值
      */

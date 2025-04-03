@@ -6,8 +6,6 @@ import java.io.InputStream;
 
 import cn.featherfly.data.core.DataRecord;
 import cn.featherfly.data.core.DataSet;
-import cn.featherfly.data.core.DataSource;
-import cn.featherfly.data.office.word.WordDataSource;
 
 /**
  * <p>
@@ -19,7 +17,7 @@ import cn.featherfly.data.office.word.WordDataSource;
 public class WordDataSourceTest {
     public static void main(String[] args) throws IOException {
         InputStream is = WordDataSourceTest.class.getResourceAsStream("Word.docx");
-        WordDataSource<DataRecord> source = new WordDataSource<DataRecord>(is, new WordDataRecordMapper());
+        WordDataSource<DataRecord> source = new WordDataSource<>(is, new WordDataRecordMapper());
         int dsIndex = 0;
         for (DataSet<DataRecord> dataSet : source.getDataSets()) {
             int rIndex = 0;
@@ -27,7 +25,7 @@ public class WordDataSourceTest {
             for (DataRecord record : dataSet.getDataRecords()) {
                 int vIndex = 0;
                 System.out.println(" row " + rIndex);
-                
+
                 for (String key : record.getKeys()) {
                     System.out.print("\tcell " + vIndex + " : " + record.get(key) + " -> key : " + key);
                     vIndex++;
@@ -37,16 +35,16 @@ public class WordDataSourceTest {
             }
             dsIndex++;
         }
-//        for (DataSet<DataRecord> dataSet : source.getDataSets()) {
-//            int rIndex = 0;
-//            for (DataRecord record : dataSet.getDataRecords()) {
-//                int vIndex = 0;
-//                for (Object value : record.getValues()) {
-//                    System.out.println(dsIndex + " " + rIndex + " " + vIndex + " : " + value);
-//                }
-//                rIndex++;
-//            }
-//            dsIndex++;
-//        }
+        //        for (DataSet<DataRecord> dataSet : source.getDataSets()) {
+        //            int rIndex = 0;
+        //            for (DataRecord record : dataSet.getDataRecords()) {
+        //                int vIndex = 0;
+        //                for (Object value : record.getValues()) {
+        //                    System.out.println(dsIndex + " " + rIndex + " " + vIndex + " : " + value);
+        //                }
+        //                rIndex++;
+        //            }
+        //            dsIndex++;
+        //        }
     }
 }
