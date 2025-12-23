@@ -3,25 +3,19 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 def isReleaseBuild() {
-    return System.getProperty("snapshot") == null && System.getProperty("SNAPSHOT") == null
-            && getProperties().get("snapshot") == null && getProperties().get("SNAPSHOT") == null 
+    return version.contains("SNAPSHOT") == false
 }
 
-def getFinalVersion() {
-    return isReleaseBuild() ? version : version + "-SNAPSHOT"
-}
+def sonatypeRepositoryUrl
+if (isReleaseBuild()) {
+    println 'RELEASE BUILD'
+    sonatypeRepositoryUrl = hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+            : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+} else {
+    println 'SNAPSHOT BUILD'
+    sonatypeRepositoryUrl = hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+            : "https://oss.sonatype.org/content/repositories/snapshots/"
 
-def getSonatypeRepositoryUrl() {
-    if (isReleaseBuild()) {
-        println 'RELEASE BUILD'
-        return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
-                : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-    } else {
-        println 'SNAPSHOT BUILD'
-        return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
-                : "https://oss.sonatype.org/content/repositories/snapshots/"
-    
-    }
 }
 
 def getRepositoryUsername() {
@@ -41,25 +35,27 @@ def getRepositoryPassword() {
 }
 
 task sourcesJar(type: Jar) {
+    //classifier = 'sources'
     archiveClassifier.set("sources")
     from sourceSets.main.java.srcDirs
 }
 
 task javadocJar(type: Jar, dependsOn:javadoc) {
+    //classifier = 'javadoc'
     archiveClassifier.set("javadoc")
     from javadoc.destinationDir
 }
 
 publishing {
     publications {
-        release(MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
 
             artifact sourcesJar
             artifact javadocJar
             groupId = group
             artifactId = archivesBaseName
-            version = getFinalVersion()
+            version = version
             pom {
                 name = archivesBaseName
                 packaging = POM_Packaging
@@ -92,7 +88,7 @@ publishing {
     }
     repositories {
         maven {
-            url getSonatypeRepositoryUrl()
+            url sonatypeRepositoryUrl
             credentials {
                 username getRepositoryUsername()
                 password getRepositoryPassword()
@@ -103,6 +99,6 @@ publishing {
 
 signing {
     required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
-    sign publishing.publications.release
+    sign publishing.publications.mavenJava
 }
 
