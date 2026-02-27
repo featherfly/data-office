@@ -1,3 +1,6 @@
+# 0.2.1 2026-02-27
+1. 升级依赖common-core-1.16.0,featherfly-conversion-1.6.0
+
 # 0.2.0 2025-12-23
 1. DataSource加入getDataSet(String)
 2. DataSet加入getName()
